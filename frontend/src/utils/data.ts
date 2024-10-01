@@ -25,7 +25,7 @@ export interface NotesDbType {
   };
 }
 
-const useNotesDb: NotesDbType = () => {
+const useInfoDb: NotesDbType = () => {
   const [storeTxnStatus, setStoreTxnStatus] = useState(false);
   const [fetchStatus, setFetchStatus] = useState(false);
 
@@ -176,4 +176,4 @@ const initDb = (): Promise<IDBDatabase> => {
   });
 };
 
-export default useNotesDb;
+export default useInfoDb;
