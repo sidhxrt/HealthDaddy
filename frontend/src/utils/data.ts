@@ -2,28 +2,26 @@ import { useState } from "react";
 
 const VERSION = 1;
 
-export interface Note {
-  id: number;
-  path: string;
-  content: string;
-  embedding?: Float32Array;
+export interface PersonalInfo {
+  name: string;
+  info: any;
 }
 
 export enum DBs {
-  notes = "NotesDB",
+  notes = "UserInfoDB",
 }
 
 export enum Stores {
-  notes = "Notes",
+  notes = "UserInfo",
 }
 
 export interface NotesDbType {
   (): {
     storeTxnStatus: boolean;
-    fetchAllNotes: () => Promise<Note[]>;
-    storeNote: (data: Omit<Note, "id">) => Promise<Note>;
-    deleteNote: (id: string) => Promise<boolean>;
-    putNote: (note: Omit<Note, "id"> & { id?: number }) => Promise<Note>;
+    fetchInfo: () => Promise<PersonalInfo>;
+    storeInfo: (data: PersonalInfo) => Promise<boolean>;
+    deleteInfo: (name: string) => Promise<boolean>;
+    editInfo: (note: PersonalInfo) => Promise<PersonalInfo>;
   };
 }
 
@@ -31,7 +29,7 @@ const useNotesDb: NotesDbType = () => {
   const [storeTxnStatus, setStoreTxnStatus] = useState(false);
   const [fetchStatus, setFetchStatus] = useState(false);
 
-  const fetchAllNotes = (): Promise<Note[]> => {
+  const fetchInfo = (): Promise<PersonalInfo> => {
     return new Promise((resolve, reject) => {
       if (storeTxnStatus) reject("Txn already in progress");
       setFetchStatus(true);
@@ -42,7 +40,7 @@ const useNotesDb: NotesDbType = () => {
         res.onsuccess = () => {
           console.log("fetch txn success");
           setStoreTxnStatus(false);
-          resolve(res.result);
+          resolve(res.result[0]);
         };
         res.onerror = (event) => {
           setFetchStatus(false);
@@ -52,7 +50,7 @@ const useNotesDb: NotesDbType = () => {
     });
   };
 
-  const fetchNote = (id: string): Promise<Note[]> => {
+  const fetchNote = (id: string): Promise<PersonalInfo[]> => {
     return new Promise((resolve, reject) => {
       if (storeTxnStatus) reject("Txn already in progress");
       setFetchStatus(true);
@@ -73,7 +71,7 @@ const useNotesDb: NotesDbType = () => {
     });
   };
 
-  const storeNote = (data: Omit<Note, "id">): Promise<Note> => {
+  const storeInfo = (data: PersonalInfo): Promise<boolean> => {
     return new Promise((resolve, reject) => {
       if (storeTxnStatus) reject("Txn already in progress");
       setStoreTxnStatus(true);
@@ -82,7 +80,7 @@ const useNotesDb: NotesDbType = () => {
         const res = tx.objectStore(Stores.notes).add(data);
         res.onsuccess = () => {
           setStoreTxnStatus(false);
-          resolve({ ...data, id: Number(res.result) });
+          resolve(true);
         };
         res.onerror = () => {
           setStoreTxnStatus(false);
@@ -94,13 +92,13 @@ const useNotesDb: NotesDbType = () => {
     });
   };
 
-  const deleteNote = (id: string): Promise<boolean> => {
+  const deleteInfo = (name: string): Promise<boolean> => {
     return new Promise((resolve, reject) => {
       if (storeTxnStatus) reject("Txn already in progress");
       setStoreTxnStatus(true);
       initDb().then((db) => {
         const tx = db.transaction(Stores.notes, "readwrite");
-        const res = tx.objectStore(Stores.notes).delete(id);
+        const res = tx.objectStore(Stores.notes).delete(name);
         res.onsuccess = () => {
           setStoreTxnStatus(false);
           resolve(true);
@@ -113,28 +111,39 @@ const useNotesDb: NotesDbType = () => {
     });
   };
 
-  const putNote = (
-    data: Omit<Note, "id"> & { id?: number }
-  ): Promise<Note> => {
+  const editInfo = (
+    data: Omit<PersonalInfo, "name">
+  ): Promise<PersonalInfo> => {
     return new Promise((resolve, reject) => {
       if (storeTxnStatus) reject("Txn already in progress");
       setStoreTxnStatus(true);
       initDb().then((db) => {
         const tx = db.transaction(Stores.notes, "readwrite");
         const store = tx.objectStore(Stores.notes);
-        const res = store.put(data);
-        res.onsuccess = () => {
-          setStoreTxnStatus(false);
-          resolve({ ...data, id: Number(res.result) });
+        const get = store.getAll();
+        get.onsuccess = () => {
+          if (!get.result) {
+            setStoreTxnStatus(false);
+            reject("No data");
+          }
+          const res = store.put({ ...data, name: get.result[0].name });
+          res.onsuccess = () => {
+            setStoreTxnStatus(false);
+            resolve({ ...data, name: get.result[0].name });
+          };
+          res.onerror = () => {
+            setStoreTxnStatus(false);
+            reject("Transaction error:" + res.error);
+          };
         };
-        res.onerror = () => {
+        get.onerror = () => {
           setStoreTxnStatus(false);
-          reject("Transaction error:" + res.error);
+          reject("Transaction error:" + get.error);
         };
       });
     });
   };
-  return { storeTxnStatus, fetchAllNotes, storeNote, deleteNote, putNote };
+  return { storeTxnStatus, fetchInfo, storeInfo, deleteInfo, editInfo };
 };
 
 const initDb = (): Promise<IDBDatabase> => {
@@ -149,10 +158,8 @@ const initDb = (): Promise<IDBDatabase> => {
       if (!db.objectStoreNames.contains(Stores.notes)) {
         console.log("Creating notes store");
         const notesStore = db.createObjectStore(Stores.notes, {
-          keyPath: "id",
-          autoIncrement: true,
+          keyPath: "name",
         });
-        notesStore.createIndex("path", "path", { unique: true });
       }
     };
 
