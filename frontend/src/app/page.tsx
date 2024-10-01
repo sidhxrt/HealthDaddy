@@ -1,9 +1,10 @@
-import { Typography } from "@mui/material";
+import { Stack, TextField, Typography } from "@mui/material";
 
 export default function Home() {
   return (
-    <div className={``}>
-      <Typography variant="h1">Home</Typography>
-    </div>
+    <Stack sx={{ alignItems: "center" }}>
+      <Typography variant="h3">Enter Your details</Typography>
+      <TextField label="Outlined" variant="outlined" />
+    </Stack>
   );
 }
