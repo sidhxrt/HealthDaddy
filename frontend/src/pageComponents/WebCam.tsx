@@ -1,7 +1,10 @@
 "use client";
-import { Button, Stack, useMediaQuery } from "@mui/material";
-import Image from "next/image";
-import { SetStateAction, useCallback, useRef, useState } from "react";
+import CameraAlt from "@mui/icons-material/CameraAlt";
+import Close from "@mui/icons-material/Close";
+import Done from "@mui/icons-material/Done";
+import { Button, IconButton, Stack, useMediaQuery } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import { SetStateAction, useCallback, useRef } from "react";
 import Webcam from "react-webcam";
 
 interface WebCamProps {
@@ -15,14 +18,17 @@ export default function WebCam({
   setImage,
   getScoreAndRedirect,
 }: WebCamProps) {
+  const theme = useTheme();
   const webcamRef = useRef<Webcam>(null);
-  const mobileScreen = useMediaQuery("(min-width: 600px)");
-  const ratio = mobileScreen ? 4 / 3 : 16 / 9;
+  const mobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const videoConstraints = {
-    aspectRatio: ratio,
-    facingMode: { exact: "user" },
-  };
+  const videoConstraints = mobile
+    ? {
+        aspectRatio: window.innerWidth / (window.innerHeight * 0.9),
+      }
+    : {
+        aspectRatio: window.innerWidth / (window.innerHeight * 0.9),
+      };
 
   const capture = useCallback(() => {
     if (webcamRef.current) {
@@ -34,30 +40,82 @@ export default function WebCam({
   }, [webcamRef]);
 
   return (
-    <Stack alignItems={"center"} overflow={"hidden"}>
+    <Stack height={"98vh"} alignItems={"center"} justifyContent={"end"}>
       {image ? (
         <>
-          <img src={image} alt="Screenshot" />
-          <Button
-            onClick={() => {
-              setImage(null);
+          <Stack width={"100%"}>
+            <img src={image} alt="Screenshot" />
+          </Stack>
+
+          <Stack
+            sx={{
+              width: "100%",
+              flexDirection: "row",
+              gap: "10px",
+              flexGrow: "1",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
-            delete
-          </Button>
-          <Button onClick={getScoreAndRedirect}>Submit</Button>
+            <IconButton
+              sx={{
+                width: "70px",
+                height: "70px",
+                border: "double 2px grey",
+                backgroundColor: "grey",
+              }}
+              onClick={getScoreAndRedirect}
+            >
+              <Done fontSize={"large"} />
+            </IconButton>
+            <IconButton
+              sx={{
+                width: "70px",
+                height: "70px",
+                border: "double 2px grey",
+                backgroundColor: "grey",
+              }}
+              onClick={() => {
+                setImage(null);
+              }}
+            >
+              <Close fontSize={"large"} />
+            </IconButton>
+          </Stack>
         </>
       ) : (
         <>
-          <Webcam
-            audio={false}
-            ref={webcamRef}
-            screenshotFormat="image/jpeg"
-            imageSmoothing={false}
-            screenshotQuality={1}
-            videoConstraints={videoConstraints}
-          />
-          <Button onClick={capture}>Capture photo</Button>
+          <Stack width={"100%"}>
+            <Webcam
+              audio={false}
+              ref={webcamRef}
+              screenshotFormat="image/jpeg"
+              imageSmoothing={false}
+              screenshotQuality={1}
+              videoConstraints={videoConstraints}
+            />
+          </Stack>
+
+          <Stack
+            sx={{
+              width: "100%",
+              height: "15vh",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <IconButton
+              sx={{
+                width: "70px",
+                height: "70px",
+                border: "double 2px grey",
+                backgroundColor: "grey",
+              }}
+              onClick={capture}
+            >
+              <CameraAlt fontSize={"large"} />
+            </IconButton>
+          </Stack>
         </>
       )}
     </Stack>
