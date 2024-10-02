@@ -1,5 +1,6 @@
 "use client";
 import { Button, Stack, useMediaQuery } from "@mui/material";
+import Image from "next/image";
 import { SetStateAction, useCallback, useRef, useState } from "react";
 import Webcam from "react-webcam";
 
@@ -36,7 +37,7 @@ export default function WebCam({
     <Stack alignItems={"center"} overflow={"hidden"}>
       {image ? (
         <>
-          <img src={image} alt="Screenshot" />
+          <Image src={image} alt="Screenshot" />
           <Button
             onClick={() => {
               setImage(null);

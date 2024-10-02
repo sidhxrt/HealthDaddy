@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useInfoDb, { PersonalInfo } from "@/utils/data";
 import {
   Stack,
@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 
 import FormLabel from "@mui/material/FormLabel";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const questions = [
@@ -26,9 +27,14 @@ export default function Home() {
     "Do you consume Alcohol?",
   ];
   const db = useInfoDb();
-  const saveInfo = async (data: PersonalInfo) => {
-    db.storeInfo(data);
-  };
+  const router = useRouter();
+
+  useEffect(() => {
+    db.fetchInfo().then((res) => {
+      res && router.push("/scan");
+    });
+  });
+  
   const [values, setValues] = useState<{
     Name: string;
     Age: string;
@@ -40,25 +46,32 @@ export default function Home() {
     questions: [],
     errors: {},
   });
+
   const [formSubmitted, setFormSubmitted] = useState(false);
   const handleChanges = (e: { target: { name: any; value: any } }) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
   const handleSubmit = () => {
-    const newErrors: { [key: string]: string } = {};
+    var newErrors: { [key: string]: string } = {};
     if (!values.Name.trim()) {
       newErrors["Name"] = "This field is required.";
     }
     if (!values.Age.trim()) {
       newErrors["Age"] = "This field is required.";
     }
-
     questions.forEach((_, idx) => {
       if (!values.questions[idx]) {
         newErrors[idx] = "This field is required.";
       }
     });
     setValues({ ...values, errors: newErrors });
+    if (!Object.keys(newErrors).length) {
+      db.storeInfo({
+        name: values.Name,
+        info: { age: values.Age, questions: values.questions },
+      });
+      router.push("/scan");
+    }
     setFormSubmitted(true);
   };
 
@@ -122,7 +135,6 @@ export default function Home() {
               sx={{ height: "56px" }}
               onChange={(e) => {
                 const newQuestions = [...values.questions];
-
                 newQuestions[index] = e.target.value;
                 setValues({ ...values, questions: newQuestions });
               }}
