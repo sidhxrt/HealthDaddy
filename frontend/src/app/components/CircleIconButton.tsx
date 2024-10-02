@@ -1,4 +1,4 @@
-import { IconButton, IconButtonProps, SxProps, Theme } from "@mui/material";
+import { IconButton, IconButtonProps } from "@mui/material";
 
 import { ReactElement } from "react";
 

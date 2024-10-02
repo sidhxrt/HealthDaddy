@@ -9,8 +9,6 @@ import {
   CardHeader,
   Collapse,
   IconButton,
-  List,
-  ListItem,
   Stack,
   Typography,
 } from "@mui/material";
