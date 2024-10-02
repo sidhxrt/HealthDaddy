@@ -10,7 +10,7 @@ import os
 
 load_dotenv()
 
-
+'''
 def initialize_chroma_db():
     pdf_folder = "./std_pdfs"
     pdf_files = [f for f in os.listdir(pdf_folder) if f.endswith('.pdf')]
@@ -40,11 +40,11 @@ def retrieverFunction(ingredients):
     
     retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 500})  # k value is set to 10
     return retriever.invoke(ingredients)
-
+'''
 
 def productInfo(personInfo, ingredients):
     if (ingredients != ""):
-        standards = retrieverFunction(ingredients)
+        #standards = retrieverFunction(ingredients)
         parser = StrOutputParser()
         llm = ChatGoogleGenerativeAI(model="gemini-1.5-pro", temperature=0.2, max_toxens=500)
         system_prompt = (
@@ -61,14 +61,17 @@ def productInfo(personInfo, ingredients):
         prompt = ChatPromptTemplate.from_messages(
             [
                 ("system", system_prompt),
-                ("user", "individual_dietary_preferences: {person_info}\nstandards: {standards} ingredients: {input}"),   
+                #("user", "individual_dietary_preferences: {person_info}\nstandards: {standards}\ningredients: {input}"),   
+                ("user", "individual_dietary_preferences: {person_info}\ningredients: {input}"),   
             ]
         )
 
 
         chain = prompt | llm | parser
-        return chain.invoke({"person_info": personInfo, "standards": standards, "input": ingredients})     
+        #return chain.invoke({"person_info": personInfo, "standards": standards, "input": ingredients})     
+        return chain.invoke({"person_info": personInfo, "input": ingredients})     
     
+
     else:
         return "['couldnt fetch information for the product']" 
 

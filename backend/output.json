@@ -1,0 +1,16 @@
+{
+    "safety_score": 80,
+    "caution_message": "This product contains wheat, soy, and processed ingredients that may not align with a strict vegan diet. It is also high in sodium, which may be a concern for hypertension. Always read labels and choose products with minimal processing and additives when possible.",
+    "short_term_effects": [
+        "Increased sodium intake may lead to water retention and elevated blood pressure.",
+        "The high refined carbohydrate content could cause blood sugar spikes.",
+        "Flavor enhancers might contribute to cravings for savory foods."
+    ],
+    "long_term_effects": [
+        "Regular consumption of highly processed foods with refined carbohydrates and unhealthy fats may contribute to weight gain and increase the risk of chronic diseases like diabetes and heart disease.",
+        "High sodium intake over time can exacerbate hypertension and potentially lead to kidney problems.",
+        "Reliance on artificial flavors may impact taste preferences and make it harder to enjoy whole",
+        "unprocessed foods."
+    ],
+    "environmental_score": 65
+}

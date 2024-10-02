@@ -3,9 +3,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 from pydantic import BaseModel
-from ai import productInfo, initialize_chroma_db
+from ai import productInfo#, initialize_chroma_db
 import json
 
+'''
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await initialize_chroma_db()
@@ -13,7 +14,9 @@ async def lifespan(app: FastAPI):
   
 
 app = FastAPI(lifespan=lifespan)
+'''
 
+app = FastAPI()
 
 
 origins = [
