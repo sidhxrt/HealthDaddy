@@ -1,5 +1,7 @@
 venv
-pdfs
 .env
 myenv
 __pycache__
+std_pdfs
+chroma_db
+trash.py

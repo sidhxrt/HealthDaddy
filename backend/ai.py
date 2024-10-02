@@ -1,8 +1,8 @@
 from langchain_google_genai import ChatGoogleGenerativeAI
-#from langchain_community.document_loaders import PyPDFLoader
-#from langchain.text_splitter import RecursiveCharacterTextSplitter
-#from langchain_google_genai import GoogleGenerativeAIEmbeddings
-#from langchain_chroma import Chroma
+from langchain_community.document_loaders import PyPDFLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from langchain_chroma import Chroma
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from dotenv import load_dotenv
@@ -10,26 +10,41 @@ import os
 
 load_dotenv()
 
-'''
-def retrieverFunction(ingredients):
-    pdf_folder = r"\googleGenAIX\backend\pdfs"
+
+def initialize_chroma_db():
+    pdf_folder = "./std_pdfs"
     pdf_files = [f for f in os.listdir(pdf_folder) if f.endswith('.pdf')]
-    all_docs = [] 
+    
+    all_docs = []
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000)
     for pdf_file in pdf_files:
-        pdf_path = os.path.join(pdf_folder, pdf_file)  
-        loader = PyPDFLoader(pdf_path)  
-        data = loader.load()  
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000) 
-        docs = text_splitter.split_documents(data)  
-        all_docs.extend(docs) 
-    vectorstore = Chroma.from_documents(documents=all_docs, embedding=GoogleGenerativeAIEmbeddings(model="models/embedding-001"))
-    retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 500})
+        pdf_path = os.path.join(pdf_folder, pdf_file)
+        loader = PyPDFLoader(pdf_path)
+        data = loader.load()
+        all_docs.extend(text_splitter.split_documents(data))
+
+    vectorstore = Chroma.from_documents(
+        documents=all_docs, 
+        embedding=GoogleGenerativeAIEmbeddings(model="models/embedding-001"),
+        persist_directory="./chroma_db"  
+    )
+    
+    vectorstore.persist()  
+    return vectorstore
+
+def retrieverFunction(ingredients):
+    vectorstore = Chroma(
+        embedding_function=GoogleGenerativeAIEmbeddings(model="models/embedding-001"),
+        persist_directory="./chroma_db"  
+    )
+    
+    retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 500})  # k value is set to 10
     return retriever.invoke(ingredients)
-'''
+
 
 def productInfo(personInfo, ingredients):
     if (ingredients != ""):
-        #standards = retrieverFunction(ingredients)
+        standards = retrieverFunction(ingredients)
         parser = StrOutputParser()
         llm = ChatGoogleGenerativeAI(model="gemini-1.5-pro", temperature=0.2, max_toxens=500)
         system_prompt = (
@@ -46,22 +61,16 @@ def productInfo(personInfo, ingredients):
         prompt = ChatPromptTemplate.from_messages(
             [
                 ("system", system_prompt),
-                #("user", "{input}"),
-                ("user", "individual_dietary_preferences: {person_info}\ningredients: {input}"),   
+                ("user", "individual_dietary_preferences: {person_info}\nstandards: {standards} ingredients: {input}"),   
             ]
         )
 
 
         chain = prompt | llm | parser
-        return chain.invoke({"person_info": personInfo, "input": ingredients})    
-        #return chain.invoke({"input": ingredients})     
+        return chain.invoke({"person_info": personInfo, "standards": standards, "input": ingredients})     
     
     else:
         return "['couldnt fetch information for the product']" 
-
-# test current code once
-# test code with split retrieve function
-# test code with pdf.py
 
   
 
