@@ -35,7 +35,7 @@ export default function WebCam({
     setVideoConstraints({
       aspectRatio: window.innerWidth / (window.innerHeight * 0.9),
     });
-  });
+  }, []);
 
   const capture = useCallback(() => {
     if (webcamRef.current) {
