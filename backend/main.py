@@ -1,10 +1,19 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 from pydantic import BaseModel
-from ai import productInfo
+from ai import productInfo, initialize_chroma_db
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await initialize_chroma_db()
+    yield
+  
+
+app = FastAPI(lifespan=lifespan)
+
+
 
 origins = [
     "http://localhost:8000",
@@ -34,9 +43,10 @@ class getData(BaseModel):
     personInfo: PersonInfo
 
 
+
 @app.post("/check")
-async def fetchinfo():
-    person = getData.personInfo
+async def fetchinfo(prompt: getData):
+    person = prompt.personInfo
     personInfo = f"age:{person.age}, allergies:{person.allergies}, medical conditions:{person.med_conditon}, current medications:{person.current_meds}, is pregnant or breastfeeding? {person.pregnancy_bf}, dietary restrictions:{person.diet_restrictions}, Lifestyle Factors:{person.lifestyle_factors}"
-    output = productInfo(personInfo, getData.ingredients)
+    output = productInfo(personInfo, prompt.ingredients)
     return output
