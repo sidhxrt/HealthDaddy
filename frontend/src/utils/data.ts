@@ -4,7 +4,10 @@ const VERSION = 1;
 
 export interface PersonalInfo {
   name: string;
-  info: any;
+  info: {
+    age: number;
+    questions: string[];
+  };
 }
 
 export enum DBs {

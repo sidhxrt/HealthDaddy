@@ -6,8 +6,11 @@ export interface getScoreModel {
   personInfo: PersonalInfo["info"];
 }
 export interface getScoreResultModel {
-  score: number;
-  caution: string;
+  safety_score: number;
+  caution_message: string;
+  short_term_effects: string[];
+  long_term_effects: string[];
+  environmental_score: number;
 }
 
 export default async function getScore(data: getScoreModel) {

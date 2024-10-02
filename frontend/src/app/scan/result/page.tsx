@@ -1,17 +1,6 @@
 "use client";
 import { getScoreResultModel } from "@/api/getScore";
-import {
-  List,
-  ListItem,
-  ListItemText,
-  Typography,
-  Box,
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
-  Stack,
-} from "@mui/material";
+import { ListItem, ListItemText } from "@mui/material";
 
 export default function Result({
   searchParams,
@@ -22,7 +11,7 @@ export default function Result({
     <>
       <ListItem>
         <ListItemText
-          primary={`${searchParams.score}`}
+          primary={`${searchParams.safety_score}`}
           primaryTypographyProps={{
             sx: {
               fontWeight: "bold",
@@ -39,7 +28,7 @@ export default function Result({
       </ListItem>
       <ListItem>
         <ListItemText
-          primary={`Caution: ${searchParams.caution}`}
+          primary={`Caution: ${searchParams.caution_message}`}
           primaryTypographyProps={{
             sx: {
               fontStyle: "italic",

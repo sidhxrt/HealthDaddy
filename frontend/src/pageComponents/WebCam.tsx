@@ -4,8 +4,8 @@ import Cached from "@mui/icons-material/Cached";
 import CameraAlt from "@mui/icons-material/CameraAlt";
 import Close from "@mui/icons-material/Close";
 import Done from "@mui/icons-material/Done";
-import {  Stack } from "@mui/material";
-import { SetStateAction, useCallback, useRef, useState } from "react";
+import { Stack } from "@mui/material";
+import { SetStateAction, useRef, useState } from "react";
 import { Camera, CameraType } from "react-camera-pro";
 
 interface WebCamProps {
@@ -113,6 +113,7 @@ export default function WebCam({
               onClick={capture}
             />
             <CircleIconButton
+              disabled={numberOfCameras <= 1}
               Icon={<Cached fontSize="large" />}
               onClick={changeCam}
             />
