@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import useInfoDb, { PersonalInfo } from "@/utils/data";
+import useInfoDb from "@/utils/data";
 import {
   Stack,
   TextField,
@@ -14,7 +14,6 @@ import {
   FormHelperText,
 } from "@mui/material";
 
-import FormLabel from "@mui/material/FormLabel";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
@@ -31,10 +30,10 @@ export default function Home() {
 
   useEffect(() => {
     db.fetchInfo().then((res) => {
-      res && router.push("/scan");
+      if (res) router.push("/scan");
     });
   });
-  
+
   const [values, setValues] = useState<{
     Name: string;
     Age: string;
@@ -48,11 +47,11 @@ export default function Home() {
   });
 
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const handleChanges = (e: { target: { name: any; value: any } }) => {
+  const handleChanges = (e: { target: { name: string; value: string } }) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
   const handleSubmit = () => {
-    var newErrors: { [key: string]: string } = {};
+    const newErrors: { [key: string]: string } = {};
     if (!values.Name.trim()) {
       newErrors["Name"] = "This field is required.";
     }
@@ -68,7 +67,7 @@ export default function Home() {
     if (!Object.keys(newErrors).length) {
       db.storeInfo({
         name: values.Name,
-        info: { age: values.Age, questions: values.questions },
+        info: { age: Number(values.Age), questions: values.questions },
       });
       router.push("/scan");
     }
