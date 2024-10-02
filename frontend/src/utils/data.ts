@@ -4,15 +4,7 @@ const VERSION = 1;
 
 export interface PersonalInfo {
   name: string;
-  info: {
-    age: number;
-    allergies: string[];
-    med_condition: string[];
-    current_meds: string[];
-    pregnancy_bf: string[];
-    diet_restrictions: string[];
-    lifestyle_factors: string[];
-  };
+  info: any;
 }
 
 export enum DBs {
@@ -20,7 +12,7 @@ export enum DBs {
 }
 
 export enum Stores {
-  notes = "UserInfo",
+  UserInfo = "UserInfo",
 }
 
 export interface NotesDbType {
@@ -35,44 +27,23 @@ export interface NotesDbType {
 
 const useInfoDb: NotesDbType = () => {
   const [storeTxnStatus, setStoreTxnStatus] = useState(false);
-  const [fetchStatus, setFetchStatus] = useState(false);
+  // const [fetchStatus, setFetchStatus] = useState(false);
 
   const fetchInfo = (): Promise<PersonalInfo> => {
     return new Promise((resolve, reject) => {
       if (storeTxnStatus) reject("Txn already in progress");
-      setFetchStatus(true);
+      // setFetchStatus(true);
       initDb().then((db) => {
-        const tx = db.transaction(Stores.notes);
+        const tx = db.transaction(Stores.UserInfo);
 
-        const res = tx.objectStore(Stores.notes).getAll();
+        const res = tx.objectStore(Stores.UserInfo).getAll();
         res.onsuccess = () => {
           console.log("fetch txn success");
           setStoreTxnStatus(false);
           resolve(res.result[0]);
         };
-        res.onerror = (event) => {
-          setFetchStatus(false);
-          reject("Transaction error:" + res.error);
-        };
-      });
-    });
-  };
-
-  const fetchNote = (id: string): Promise<PersonalInfo[]> => {
-    return new Promise((resolve, reject) => {
-      if (storeTxnStatus) reject("Txn already in progress");
-      setFetchStatus(true);
-      initDb().then((db) => {
-        const tx = db.transaction(Stores.notes);
-
-        const res = tx.objectStore(Stores.notes).get(id);
-        res.onsuccess = () => {
-          console.log("fetch txn success");
-          setStoreTxnStatus(false);
-          resolve(res.result);
-        };
-        res.onerror = (event) => {
-          setFetchStatus(false);
+        res.onerror = () => {
+          // setFetchStatus(false);
           reject("Transaction error:" + res.error);
         };
       });
@@ -84,8 +55,8 @@ const useInfoDb: NotesDbType = () => {
       if (storeTxnStatus) reject("Txn already in progress");
       setStoreTxnStatus(true);
       initDb().then((db) => {
-        const tx = db.transaction(Stores.notes, "readwrite");
-        const res = tx.objectStore(Stores.notes).add(data);
+        const tx = db.transaction(Stores.UserInfo, "readwrite");
+        const res = tx.objectStore(Stores.UserInfo).add(data);
         res.onsuccess = () => {
           setStoreTxnStatus(false);
           resolve(true);
@@ -105,8 +76,8 @@ const useInfoDb: NotesDbType = () => {
       if (storeTxnStatus) reject("Txn already in progress");
       setStoreTxnStatus(true);
       initDb().then((db) => {
-        const tx = db.transaction(Stores.notes, "readwrite");
-        const res = tx.objectStore(Stores.notes).delete(name);
+        const tx = db.transaction(Stores.UserInfo, "readwrite");
+        const res = tx.objectStore(Stores.UserInfo).delete(name);
         res.onsuccess = () => {
           setStoreTxnStatus(false);
           resolve(true);
@@ -126,8 +97,8 @@ const useInfoDb: NotesDbType = () => {
       if (storeTxnStatus) reject("Txn already in progress");
       setStoreTxnStatus(true);
       initDb().then((db) => {
-        const tx = db.transaction(Stores.notes, "readwrite");
-        const store = tx.objectStore(Stores.notes);
+        const tx = db.transaction(Stores.UserInfo, "readwrite");
+        const store = tx.objectStore(Stores.UserInfo);
         const get = store.getAll();
         get.onsuccess = () => {
           if (!get.result) {
@@ -163,9 +134,9 @@ const initDb = (): Promise<IDBDatabase> => {
       const db = request.result;
 
       // if the data object store doesn't exist, create it
-      if (!db.objectStoreNames.contains(Stores.notes)) {
+      if (!db.objectStoreNames.contains(Stores.UserInfo)) {
         console.log("Creating notes store");
-        const notesStore = db.createObjectStore(Stores.notes, {
+        db.createObjectStore(Stores.UserInfo, {
           keyPath: "name",
         });
       }

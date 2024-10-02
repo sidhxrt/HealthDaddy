@@ -31,6 +31,7 @@ print(retrieved_docs)
 llm = ChatGoogleGenerativeAI(model="gemini-1.5-pro", temperature=0.2, max_tokens=None, timeout=None)
 
 
+<<<<<<< HEAD
 
 def productInfo(person_info, ingredients):
     if (ingredients != ""):
@@ -68,6 +69,8 @@ def productInfo(person_info, ingredients):
 
 
 
+=======
+>>>>>>> 57c941b64cb580630f25ebb7c0084230b179894e
 
 
 

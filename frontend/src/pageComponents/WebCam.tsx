@@ -1,5 +1,6 @@
 "use client";
 import { Button, Stack, useMediaQuery } from "@mui/material";
+import Image from "next/image";
 import { SetStateAction, useCallback, useRef, useState } from "react";
 import Webcam from "react-webcam";
 
