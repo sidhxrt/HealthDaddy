@@ -4,7 +4,15 @@ const VERSION = 1;
 
 export interface PersonalInfo {
   name: string;
-  info: any;
+  info: {
+    age: number;
+    allergies: string[];
+    med_condition: string[];
+    current_meds: string[];
+    pregnancy_bf: string[];
+    diet_restrictions: string[];
+    lifestyle_factors: string[];
+  };
 }
 
 export enum DBs {

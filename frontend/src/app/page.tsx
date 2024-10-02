@@ -1,3 +1,4 @@
+"use client";
 import useInfoDb, { PersonalInfo } from "@/utils/data";
 import { Stack, TextField, Typography } from "@mui/material";
 
