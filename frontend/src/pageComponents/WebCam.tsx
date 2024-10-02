@@ -37,7 +37,7 @@ export default function WebCam({
     <Stack alignItems={"center"} overflow={"hidden"}>
       {image ? (
         <>
-          <Image src={image} alt="Screenshot" />
+          <img src={image} alt="Screenshot" />
           <Button
             onClick={() => {
               setImage(null);
