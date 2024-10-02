@@ -27,6 +27,5 @@ vectorstore = Chroma.from_documents(documents=docs, embedding=GoogleGenerativeAI
 
 
 
-# rag
 
 
