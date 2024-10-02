@@ -1,7 +1,5 @@
 "use client";
 import React, { useState } from "react";
-
-("use client");
 import useInfoDb, { PersonalInfo } from "@/utils/data";
 import {
   Stack,
@@ -27,6 +25,10 @@ export default function Home() {
     "Do you smoke?",
     "Do you consume Alcohol?",
   ];
+  const db = useInfoDb();
+  const saveInfo = async (data: PersonalInfo) => {
+    db.storeInfo(data);
+  };
   const [values, setValues] = useState<{
     Name: string;
     Age: string;
@@ -59,10 +61,7 @@ export default function Home() {
     setValues({ ...values, errors: newErrors });
     setFormSubmitted(true);
   };
-  const db = useInfoDb();
-  const saveInfo = async (data: PersonalInfo) => {
-    db.storeInfo(data);
-  };
+
   return (
     <Container maxWidth="sm">
       <Stack
