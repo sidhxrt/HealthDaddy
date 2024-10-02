@@ -4,7 +4,13 @@ import Close from "@mui/icons-material/Close";
 import Done from "@mui/icons-material/Done";
 import { Button, IconButton, Stack, useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { SetStateAction, useCallback, useRef } from "react";
+import {
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import Webcam from "react-webcam";
 
 interface WebCamProps {
@@ -20,15 +26,16 @@ export default function WebCam({
 }: WebCamProps) {
   const theme = useTheme();
   const webcamRef = useRef<Webcam>(null);
-  const mobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const videoConstraints = mobile
-    ? {
-        aspectRatio: window.innerWidth / (window.innerHeight * 0.9),
-      }
-    : {
-        aspectRatio: window.innerWidth / (window.innerHeight * 0.9),
-      };
+  const [videoConstraints, setVideoConstraints] = useState({
+    aspectRatio: 1.98,
+  });
+
+  useEffect(() => {
+    setVideoConstraints({
+      aspectRatio: window.innerWidth / (window.innerHeight * 0.9),
+    });
+  });
 
   const capture = useCallback(() => {
     if (webcamRef.current) {
