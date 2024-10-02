@@ -1,17 +1,16 @@
-import { IconButton } from "@mui/material";
+import { IconButton, IconButtonProps, SxProps, Theme } from "@mui/material";
 
 import { ReactElement } from "react";
 
-interface CircleIconButtonProps {
+interface CircleIconButtonProps extends IconButtonProps {
   Icon: ReactElement;
-  onClick: () => void;
-  disabled?: boolean;
 }
 
 export default function CircleIconButton({
   Icon,
   onClick,
   disabled,
+  sx,
 }: CircleIconButtonProps) {
   return (
     <IconButton
@@ -21,6 +20,7 @@ export default function CircleIconButton({
         height: "70px",
         border: "double 2px grey",
         backgroundColor: "white",
+        ...sx,
       }}
       onClick={onClick}
     >
