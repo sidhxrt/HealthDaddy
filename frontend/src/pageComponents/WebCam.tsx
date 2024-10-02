@@ -1,17 +1,12 @@
 "use client";
+import CircleIconButton from "@/app/components/CircleIconButton";
+import Cached from "@mui/icons-material/Cached";
 import CameraAlt from "@mui/icons-material/CameraAlt";
 import Close from "@mui/icons-material/Close";
 import Done from "@mui/icons-material/Done";
-import { Button, IconButton, Stack, useMediaQuery } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import {
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import Webcam from "react-webcam";
+import {  Stack } from "@mui/material";
+import { SetStateAction, useCallback, useRef, useState } from "react";
+import { Camera, CameraType } from "react-camera-pro";
 
 interface WebCamProps {
   image: string | null;
@@ -24,104 +19,103 @@ export default function WebCam({
   setImage,
   getScoreAndRedirect,
 }: WebCamProps) {
-  const theme = useTheme();
-  const webcamRef = useRef<Webcam>(null);
+  const [numberOfCameras, setNumberOfCameras] = useState(0);
+  const camera = useRef<CameraType>(null);
 
-  const [videoConstraints, setVideoConstraints] = useState({
-    aspectRatio: 1.98,
-  });
-
-  useEffect(() => {
-    setVideoConstraints({
-      aspectRatio: window.innerWidth / (window.innerHeight * 0.9),
-    });
-  }, []);
-
-  const capture = useCallback(() => {
-    if (webcamRef.current) {
-      const imageSrc = webcamRef.current.getScreenshot();
-      if (imageSrc) {
-        setImage(imageSrc);
-      }
+  const capture = () => {
+    if (camera.current) {
+      const photo = camera.current.takePhoto() as string;
+      console.log(photo);
+      setImage(photo);
     }
-  }, [webcamRef]);
+  };
+  const changeCam = () => {
+    if (camera.current) {
+      const result = camera.current.switchCamera();
+      console.log(result);
+    }
+  };
 
   return (
-    <Stack height={"98vh"} alignItems={"center"} justifyContent={"end"}>
+    <Stack
+      height={"100vh"}
+      maxHeight={"100vh"}
+      alignItems={"center"}
+      justifyContent={"end"}
+      overflow={"hidden"}
+    >
       {image ? (
         <>
-          <Stack width={"100%"}>
-            <img src={image} alt="Screenshot" />
-          </Stack>
-
           <Stack
+            width={"100%"}
+            height={"100%"}
             sx={{
-              width: "100%",
-              flexDirection: "row",
-              gap: "10px",
-              flexGrow: "1",
-              alignItems: "center",
-              justifyContent: "center",
+              backgroundImage: `url(${image})`,
+              backgroundSize: "cover",
+              justifyContent: "end",
             }}
           >
-            <IconButton
+            {/* <img src={image} alt="Screenshot" /> */}
+            <Stack
               sx={{
-                width: "70px",
-                height: "70px",
-                border: "double 2px grey",
-                backgroundColor: "grey",
-              }}
-              onClick={getScoreAndRedirect}
-            >
-              <Done fontSize={"large"} />
-            </IconButton>
-            <IconButton
-              sx={{
-                width: "70px",
-                height: "70px",
-                border: "double 2px grey",
-                backgroundColor: "grey",
-              }}
-              onClick={() => {
-                setImage(null);
+                width: "100%",
+                height: "20%",
+                alignItems: "center",
+                justifyContent: "center",
+                flexDirection: "row",
+                gap: "10px",
               }}
             >
-              <Close fontSize={"large"} />
-            </IconButton>
+              <CircleIconButton
+                Icon={<Done fontSize={"large"} />}
+                onClick={getScoreAndRedirect}
+              />
+              <CircleIconButton
+                Icon={<Close fontSize={"large"} />}
+                onClick={() => {
+                  setImage(null);
+                }}
+              />
+            </Stack>
           </Stack>
         </>
       ) : (
         <>
-          <Stack width={"100%"}>
-            <Webcam
-              audio={false}
-              ref={webcamRef}
-              screenshotFormat="image/jpeg"
-              imageSmoothing={false}
-              screenshotQuality={1}
-              videoConstraints={videoConstraints}
+          <Stack width={"100%"} height={"100%"} overflow={"hidden"}>
+            <Camera
+              ref={camera}
+              aspectRatio="cover"
+              numberOfCamerasCallback={setNumberOfCameras}
+              errorMessages={{
+                noCameraAccessible:
+                  "No camera device accessible. Please connect your camera or try a different browser.",
+                permissionDenied:
+                  "Permission denied. Please refresh and give camera permission.",
+                switchCamera:
+                  "It is not possible to switch camera to different one because there is only one video device accessible.",
+                canvas: "Canvas is not supported.",
+              }}
             />
           </Stack>
 
           <Stack
             sx={{
               width: "100%",
-              height: "15vh",
+              height: "20%",
               alignItems: "center",
               justifyContent: "center",
+              flexDirection: "row",
+              gap: "10px",
             }}
           >
-            <IconButton
-              sx={{
-                width: "70px",
-                height: "70px",
-                border: "double 2px grey",
-                backgroundColor: "grey",
-              }}
+            <CircleIconButton
+              Icon={<CameraAlt fontSize={"large"} />}
               onClick={capture}
-            >
-              <CameraAlt fontSize={"large"} />
-            </IconButton>
+            />
+            <CircleIconButton
+              Icon={<Cached fontSize="large" />}
+              onClick={changeCam}
+            />
           </Stack>
         </>
       )}

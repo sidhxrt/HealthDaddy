@@ -10,7 +10,7 @@ import { useState } from "react";
 export default function Scan() {
   const db = useInfoDb();
   const router = useRouter();
-  const [image, setImage] = useState<string | null>(null);
+  const [image, setImage] = useState<string  | null>(null);
   const getScoreAndRedirect = async () => {
     if (image) {
       const ocrText = await getTextFromImg(image);
