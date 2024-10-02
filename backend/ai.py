@@ -11,22 +11,28 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-pdf_folder=r'googleGenAIX\backend\pdfs'
-pdf_files=[f for f in os.listdir(pdf_folder) if f.endswith('.pdf')]
-all_docs = []
+pdf_folder = r"C:\Users\nikit\OneDrive\Desktop\genai\googleGenAIX\backend\pdfs"
+pdf_files = [f for f in os.listdir(pdf_folder) if f.endswith('.pdf')]
+all_docs = [] 
+
 for pdf_file in pdf_files:
-    loader = PyPDFLoader(pdf_file)  
+    pdf_path = os.path.join(pdf_folder, pdf_file)  
+    loader = PyPDFLoader(pdf_path)  
     data = loader.load()  
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000)  
-    docs = text_splitter.split_documents(data) 
-    all_docs.extend(docs)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000) 
+    docs = text_splitter.split_documents(data)  
+    all_docs.extend(docs)  
 
-len(all_docs)
+vectorstore = Chroma.from_documents(documents=all_docs, embedding=GoogleGenerativeAIEmbeddings(model="models/embedding-001"))
 
-vectorstore = Chroma.from_documents(documents=docs, embedding=GoogleGenerativeAIEmbeddings(model="models/embedding-001"))
+retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 500})
+retrieved_docs=retriever.invoke(r"CHOCO CREME (38.0 ANS Jo {Jl SOLIDS, EMULSIFIER [LECITHIN (FROM SOYABEA &\Sous Suir facriow non a WHEAT FLOUR), HYDROGENATED VEGETABLE A a o=RAISING AGENTS (INS 503(i) INS 500(i INS 4 : bisODIZED SALT, NATURE IDENTICAL FLAVOUR ede L L BF 150, INS 150), EMULSIFIERS [LECITHIN (FROM SOYABEAN), MONO AN te ACIDS (FROM PALM OIL)), ARTIFICIAL FLAVOURIN BSTANS X, VANILLA a CONTAINS WHEAT, MILK, SOY. MAY CONTAIN NUT,SULPHITE H")
+print(retrieved_docs)
+llm = ChatGoogleGenerativeAI(model="gemini-1.5-pro", temperature=0.2, max_tokens=None, timeout=None)
 
 
-'''def productInfo(person_info, ingredients):
+
+def productInfo(person_info, ingredients):
     if (ingredients != ""):
         parser = StrOutputParser()
         llm = ChatGoogleGenerativeAI(model="gemini-1.5-pro", temperature=0.2, max_toxens=500)
@@ -52,7 +58,7 @@ vectorstore = Chroma.from_documents(documents=docs, embedding=GoogleGenerativeAI
         return chain.invoke({"input": ingredients})
     
     else:
-        return "['couldnt fetch information for the product']"'''
+        return "['couldnt fetch information for the product']" 
 
 
   
