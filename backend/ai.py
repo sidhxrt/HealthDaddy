@@ -1,40 +1,35 @@
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_community.document_loaders import PyPDFLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_chroma import Chroma
-from langchain.chains import create_retrieval_chain
+#from langchain_community.document_loaders import PyPDFLoader
+#from langchain.text_splitter import RecursiveCharacterTextSplitter
+#from langchain_google_genai import GoogleGenerativeAIEmbeddings
+#from langchain_chroma import Chroma
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
-pdf_folder = r"C:\Users\nikit\OneDrive\Desktop\genai\googleGenAIX\backend\pdfs"
-pdf_files = [f for f in os.listdir(pdf_folder) if f.endswith('.pdf')]
-all_docs = [] 
 
-for pdf_file in pdf_files:
-    pdf_path = os.path.join(pdf_folder, pdf_file)  
-    loader = PyPDFLoader(pdf_path)  
-    data = loader.load()  
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000) 
-    docs = text_splitter.split_documents(data)  
-    all_docs.extend(docs)  
+'''
+def retrieverFunction(ingredients):
+    pdf_folder = r"\googleGenAIX\backend\pdfs"
+    pdf_files = [f for f in os.listdir(pdf_folder) if f.endswith('.pdf')]
+    all_docs = [] 
+    for pdf_file in pdf_files:
+        pdf_path = os.path.join(pdf_folder, pdf_file)  
+        loader = PyPDFLoader(pdf_path)  
+        data = loader.load()  
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000) 
+        docs = text_splitter.split_documents(data)  
+        all_docs.extend(docs) 
+    vectorstore = Chroma.from_documents(documents=all_docs, embedding=GoogleGenerativeAIEmbeddings(model="models/embedding-001"))
+    retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 500})
+    return retriever.invoke(ingredients)
+'''
 
-vectorstore = Chroma.from_documents(documents=all_docs, embedding=GoogleGenerativeAIEmbeddings(model="models/embedding-001"))
-
-retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 500})
-retrieved_docs=retriever.invoke(r"CHOCO CREME (38.0 ANS Jo {Jl SOLIDS, EMULSIFIER [LECITHIN (FROM SOYABEA &\Sous Suir facriow non a WHEAT FLOUR), HYDROGENATED VEGETABLE A a o=RAISING AGENTS (INS 503(i) INS 500(i INS 4 : bisODIZED SALT, NATURE IDENTICAL FLAVOUR ede L L BF 150, INS 150), EMULSIFIERS [LECITHIN (FROM SOYABEAN), MONO AN te ACIDS (FROM PALM OIL)), ARTIFICIAL FLAVOURIN BSTANS X, VANILLA a CONTAINS WHEAT, MILK, SOY. MAY CONTAIN NUT,SULPHITE H")
-print(retrieved_docs)
-llm = ChatGoogleGenerativeAI(model="gemini-1.5-pro", temperature=0.2, max_tokens=None, timeout=None)
-
-
-<<<<<<< HEAD
-
-def productInfo(person_info, ingredients):
+def productInfo(personInfo, ingredients):
     if (ingredients != ""):
+        #standards = retrieverFunction(ingredients)
         parser = StrOutputParser()
         llm = ChatGoogleGenerativeAI(model="gemini-1.5-pro", temperature=0.2, max_toxens=500)
         system_prompt = (
@@ -51,16 +46,22 @@ def productInfo(person_info, ingredients):
         prompt = ChatPromptTemplate.from_messages(
             [
                 ("system", system_prompt),
-                ("user", "{input}"),
+                #("user", "{input}"),
+                ("user", "individual_dietary_preferences: {person_info}\ningredients: {input}"),   
             ]
         )
 
+
         chain = prompt | llm | parser
-        return chain.invoke({"input": ingredients})
+        return chain.invoke({"person_info": personInfo, "input": ingredients})    
+        #return chain.invoke({"input": ingredients})     
     
     else:
         return "['couldnt fetch information for the product']" 
 
+# test current code once
+# test code with split retrieve function
+# test code with pdf.py
 
   
 
@@ -69,8 +70,6 @@ def productInfo(person_info, ingredients):
 
 
 
-=======
->>>>>>> 57c941b64cb580630f25ebb7c0084230b179894e
 
 
 
