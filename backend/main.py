@@ -33,12 +33,12 @@ app.add_middleware(
 
 class PersonInfo(BaseModel):
     age: int
-    allergies: List[str]
-    med_conditon: List[str]
-    current_meds: List[str]
-    pregnancy_bf: bool
-    diet_restrictions: List[str]
-    lifestyle_factors: List[str]
+    allergies: str
+    med_conditon: str
+    current_meds: str
+    pregnancy_bf: str
+    diet_restrictions: str
+    lifestyle_factors: str
 
 class getData(BaseModel):
     ingredients: str
