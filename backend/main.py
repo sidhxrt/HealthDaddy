@@ -34,7 +34,7 @@ app.add_middleware(
 class PersonInfo(BaseModel):
     age: int
     allergies: str
-    med_conditon: str
+    med_condition: str
     current_meds: str
     pregnancy_bf: str
     diet_restrictions: str

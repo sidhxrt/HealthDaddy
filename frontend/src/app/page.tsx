@@ -108,7 +108,7 @@ export default function Home() {
               ...values,
               info: {
                 ...values.info,
-                [e.target.name]: e.target.value,
+                [e.target.name]: Number(e.target.value),
               } as PersonalInfo["info"],
             });
           }}
