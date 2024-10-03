@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from typing import List
 from pydantic import BaseModel
 from ai import productInfo#, initialize_chroma_db
-import json
+
 
 '''
 @asynccontextmanager
@@ -20,9 +20,7 @@ app = FastAPI()
 
 
 origins = [
-    "http://localhost:8000",
-    "http://localhost",
-    "http://localhost:8080"
+    "*"
 ]
 
 app.add_middleware(
@@ -74,9 +72,6 @@ async def fetchinfo(prompt: getData):
         "long_term_effects": long_term_effects,
         "environmental_score": environmental_score
     }
-    
-    with open('output.json', 'w') as json_file:
-        json.dump(formatted_output, json_file, indent=4)
     
     return formatted_output
 

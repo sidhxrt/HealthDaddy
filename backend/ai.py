@@ -1,11 +1,11 @@
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_community.document_loaders import PyPDFLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
+#from langchain_community.document_loaders import PyPDFLoader
+#from langchain.text_splitter import RecursiveCharacterTextSplitter
+#from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from dotenv import load_dotenv
-import os
+
 
 load_dotenv()
 
