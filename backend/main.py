@@ -49,7 +49,7 @@ class getData(BaseModel):
 @app.post("/check")
 async def fetchinfo(prompt: getData):
     person = prompt.personInfo
-    personInfo = f"age:{person.age}, allergies:{person.allergies}, medical conditions:{person.med_conditon}, current medications:{person.current_meds}, is pregnant or breastfeeding? {person.pregnancy_bf}, dietary restrictions:{person.diet_restrictions}, Lifestyle Factors:{person.lifestyle_factors}"
+    personInfo = f"age:{person.age}, allergies:{person.allergies}, medical conditions:{person.med_condition}, current medications:{person.current_meds}, is pregnant or breastfeeding? {person.pregnancy_bf}, dietary restrictions:{person.diet_restrictions}, Lifestyle Factors:{person.lifestyle_factors}"
     output = productInfo(personInfo, prompt.ingredients)
     
     safety_score = int(output.split('safety_score = [')[1].split(']')[0]) if 'safety_score' in output else 0
