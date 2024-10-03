@@ -6,7 +6,12 @@ export interface PersonalInfo {
   name: string;
   info: {
     age: number;
-    questions: string[];
+    allergies: string;
+    current_meds: string;
+    med_condition: string;
+    pregnancy_bf: string;
+    lifestyle_factors: string;
+    diet_restrictions: string;
   };
 }
 

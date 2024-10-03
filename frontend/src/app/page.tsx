@@ -1,14 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import useInfoDb from "@/utils/data";
+import React, { Fragment, useEffect, useState } from "react";
+import useInfoDb, { PersonalInfo } from "@/utils/data";
 import {
   Stack,
   TextField,
   Typography,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Container,
   Button,
   FormHelperText,
@@ -18,12 +14,12 @@ import { useRouter } from "next/navigation";
 
 export default function Home() {
   const questions = [
-    "Do you have any known allergies?",
-    "Are you currently taking any medications?",
-    "Do you have a medical condition?",
-    "Are you pregnant or breastfeeding?",
-    "Do you smoke?",
-    "Do you consume Alcohol?",
+    ["allergies", "Do you have any known allergies?"],
+    ["current_meds", "Are you currently taking any medications?"],
+    ["med_condition", "Do you have a medical condition?"],
+    ["pregnancy_bf", "Are you pregnant or breastfeeding?"],
+    ["lifestyle_factors", "Do you consume Alcohol or Tobacco?"],
+    ["diet_restrictions", "Are you following any dietary restrictions?"],
   ];
   const db = useInfoDb();
   const router = useRouter();
@@ -32,43 +28,39 @@ export default function Home() {
     db.fetchInfo().then((res) => {
       if (res) router.push("/scan");
     });
-  });
+  }, [db]);
 
-  const [values, setValues] = useState<{
-    Name: string;
-    Age: string;
-    questions: string[];
-    errors: { [key: string]: string };
-  }>({
-    Name: " ",
-    Age: " ",
-    questions: [],
-    errors: {},
+  const [values, setValues] = useState<PersonalInfo>({
+    name: "",
+    info: {
+      age: 0,
+      allergies: "",
+      current_meds: "",
+      med_condition: "",
+      pregnancy_bf: "",
+      lifestyle_factors: "",
+      diet_restrictions: "",
+    },
   });
 
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const handleChanges = (e: { target: { name: string; value: string } }) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
-  };
   const handleSubmit = () => {
     const newErrors: { [key: string]: string } = {};
-    if (!values.Name.trim()) {
-      newErrors["Name"] = "This field is required.";
+    if (!values.name?.trim()) {
+      console.log(values.name);
+
+      newErrors["name"] = "This field is required.";
     }
-    if (!values.Age.trim()) {
-      newErrors["Age"] = "This field is required.";
+    if (!values.info?.age) {
+      newErrors["age"] = "This field is required.";
     }
-    questions.forEach((_, idx) => {
-      if (!values.questions[idx]) {
-        newErrors[idx] = "This field is required.";
+    questions.forEach((question) => {
+      if (!values.info?.[question[0] as keyof PersonalInfo["info"]]) {
+        newErrors[question[0]] = "This field is required.";
       }
     });
-    setValues({ ...values, errors: newErrors });
     if (!Object.keys(newErrors).length) {
-      db.storeInfo({
-        name: values.Name,
-        info: { age: Number(values.Age), questions: values.questions },
-      });
+      db.storeInfo(values);
       router.push("/scan");
     }
     setFormSubmitted(true);
@@ -93,60 +85,73 @@ export default function Home() {
         <TextField
           label="Name"
           variant="outlined"
-          name="Name"
-          value={values.Name}
-          onChange={handleChanges}
+          name="name"
+          value={values.name}
+          onChange={(e: { target: { name: string; value: string } }) => {
+            setValues({ ...values, [e.target.name]: e.target.value });
+          }}
           fullWidth
           sx={{ height: "56px", marginButton: "10px" }}
-          error={formSubmitted && !values.Name.trim()}
+          error={formSubmitted && !values.name?.trim()}
         />
-        {formSubmitted && !values.Name.trim() && (
+        {formSubmitted && !values.name?.trim() && (
           <FormHelperText error>This field is required.</FormHelperText>
         )}
 
         <TextField
           label="Age"
           variant="outlined"
-          name="Age"
-          value={values.Age}
-          onChange={handleChanges}
+          name="age"
+          value={values.info.age !== 0 ? values.info.age : ""}
+          onChange={(e: { target: { name: string; value: string } }) => {
+            setValues({
+              ...values,
+              info: {
+                ...values.info,
+                [e.target.name]: e.target.value,
+              } as PersonalInfo["info"],
+            });
+          }}
           fullWidth
           sx={{ height: "56px", marginBottom: "10px" }}
-          error={formSubmitted && !values.Age.trim()}
+          error={formSubmitted && !values.info?.age}
         />
-        {formSubmitted && !values.Age.trim() && (
+        {formSubmitted && !values.info?.age && (
           <FormHelperText error>This field is required.</FormHelperText>
         )}
 
         {questions.map((question, index) => (
-          <FormControl
-            variant="standard"
-            key={index}
-            fullWidth
-            sx={{ width: "100%" }}
-          >
-            <InputLabel id={`dropdown-label-${index}`}>{question}</InputLabel>
-            <Select
-              labelId={`dropdown-label-${index}`}
-              name={`dropdown-label-${index}`}
-              value={values.questions[index] || ""}
-              label="Select Option"
-              sx={{ height: "56px" }}
-              onChange={(e) => {
-                const newQuestions = [...values.questions];
-                newQuestions[index] = e.target.value;
-                setValues({ ...values, questions: newQuestions });
+          <Fragment key={index}>
+            <TextField
+              label={question[1]}
+              variant="outlined"
+              name={question[0]}
+              value={
+                values.info
+                  ? values.info[question[0] as keyof PersonalInfo["info"]] || ""
+                  : ""
+              }
+              onChange={(e: { target: { name: string; value: string } }) => {
+                setValues({
+                  ...values,
+                  info: {
+                    ...values.info,
+                    [e.target.name]: e.target.value,
+                  } as PersonalInfo["info"],
+                });
               }}
-            >
-              <MenuItem value="yes">Yes</MenuItem>
-              <MenuItem value="no">No</MenuItem>
-            </Select>
-            {values.errors[index] && (
-              <FormHelperText style={{ color: "red" }}>
-                {values.errors[index]}
-              </FormHelperText>
-            )}
-          </FormControl>
+              fullWidth
+              sx={{ height: "56px", marginBottom: "10px" }}
+              error={
+                formSubmitted &&
+                !values.info?.[question[0] as keyof PersonalInfo["info"]]
+              }
+            />
+            {formSubmitted &&
+              !values.info?.[question[0] as keyof PersonalInfo["info"]] && (
+                <FormHelperText error>This field is required.</FormHelperText>
+              )}
+          </Fragment>
         ))}
         <Button
           type="submit"
