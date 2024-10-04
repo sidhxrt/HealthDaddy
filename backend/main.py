@@ -56,20 +56,21 @@ async def fetchinfo(prompt: getData):
     personInfo = f"age:{person.age}, allergies:{person.allergies}, medical conditions:{person.med_condition}, current medications:{person.current_meds}, is pregnant or breastfeeding? {person.pregnancy_bf}, dietary restrictions:{person.diet_restrictions}, Lifestyle Factors:{person.lifestyle_factors}"
     output = productInfo(personInfo, prompt.ingredients)
     
-    safety_score = int(output.split('safety_score = [')[1].split(']')[0]) if 'safety_score' in output else 0
-    caution_message = output.split('caution_message = [')[1].split(']')[0].strip("['").strip("']") if 'caution_message' in output else ""
+    safety_score = int(output.split('safety_score=[')[1].split(']')[0]) if 'safety_score' in output else 0
+    caution_message = output.split('caution_message=[')[1].split(']')[0].strip("['").strip("']") if 'caution_message' in output else ""
     if 'short_term_effects' in output:
-        short_term_effects = output.split('short_term_effects = [')[1].split(']')[0].strip("[]").replace("'", "").split(', ')
+        short_term_effects = output.split('short_term_effects=[')[1].split(']')[0].strip("[]").replace("'", "").split(', ')
     else:
         short_term_effects = []  
     
     if 'long_term_effects' in output:
-        long_term_effects = output.split('long_term_effects = [')[1].split(']')[0].strip("[]").replace("'", "").split(', ')
+        long_term_effects = output.split('long_term_effects=[')[1].split(']')[0].strip("[]").replace("'", "").split(', ')
     else:
         long_term_effects = []  
-    environmental_score = int(output.split('environmental_score = [')[1].split(']')[0]) if 'environmental_score' in output else 0
+    environmental_score = int(output.split('environmental_score=[')[1].split(']')[0]) if 'environmental_score' in output else 0
     
     formatted_output = {
+        "response_body": output,
         "safety_score": safety_score,
         "caution_message": caution_message,
         "short_term_effects": short_term_effects,
@@ -78,4 +79,4 @@ async def fetchinfo(prompt: getData):
     }
     
     return formatted_output
-
+    #return output
