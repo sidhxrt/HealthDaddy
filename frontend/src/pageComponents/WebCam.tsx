@@ -25,6 +25,7 @@ export default function WebCam({
   const capture = () => {
     if (camera.current) {
       const photo = camera.current.takePhoto() as string;
+      // console.log(photo);
       setImage(photo);
     }
   };
