@@ -1,6 +1,21 @@
-import { TextField, Typography } from "@mui/material";
+import { PersonalInfo } from "@/utils/data";
+import { FormHelperText, TextField, Typography,Button } from "@mui/material";
 
-export default function NameNAgeFields() {
+
+interface NameNAgeFieldsProps{
+  setScreen:(screen:string)=>void,
+  values:PersonalInfo,
+  setValues:React.Dispatch<React.SetStateAction<PersonalInfo>>;
+  formSubmitted:boolean;
+}
+export default function NameNAgeFields( {
+  setScreen,
+  values,
+  setValues,
+  formSubmitted,
+}:NameNAgeFieldsProps){
+
+  
     return (
         <>
             <Typography variant="h3" align="center">
@@ -42,7 +57,7 @@ export default function NameNAgeFields() {
             {formSubmitted && !values.info?.age && (
               <FormHelperText error>This field is required.</FormHelperText>
             )}
-            {values.name!=="" && values.info.age!==0 && <Button onClick={()=>{setScreen("health conditions")}}>-></Button>}
+            {values.name!=="" && values.info.age!==0 && <Button onClick={()=>{setScreen("health conditions")}}> -> </Button>}
           </>
     )
 }

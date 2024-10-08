@@ -1,5 +1,7 @@
 "use client";
 import React, { Fragment, useEffect, useState } from "react";
+import NameNAgeFields from "@/pageComponents/UserOnboarding/NameNAgeFields";
+
 import useInfoDb, { PersonalInfo } from "@/utils/data";
 import {
   Stack,
@@ -44,7 +46,6 @@ export default function Home() {
   });
 
   const [screen, setScreen] = useState("start");
-
   const [formSubmitted, setFormSubmitted] = useState(false);
   const handleSubmit = () => {
     const newErrors: { [key: string]: string } = {};
@@ -81,8 +82,14 @@ export default function Home() {
         }}
       >
         {screen === "start" && (
-          
+          <NameNAgeFields
+            setScreen={setScreen}
+            values={values}
+            setValues={setValues}
+            formSubmitted={formSubmitted}
+          />
         )}
+
         {screen === "health conditions" &&
           questions.map((question, index) => (
             <Fragment key={index}>
