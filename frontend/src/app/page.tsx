@@ -43,6 +43,8 @@ export default function Home() {
     },
   });
 
+  const [screen, setScreen] = useState("start");
+
   const [formSubmitted, setFormSubmitted] = useState(false);
   const handleSubmit = () => {
     const newErrors: { [key: string]: string } = {};
@@ -78,81 +80,44 @@ export default function Home() {
           height: "100vh",
         }}
       >
-        <Typography variant="h3" align="center">
-          Enter Your details
-        </Typography>
-
-        <TextField
-          label="Name"
-          variant="outlined"
-          name="name"
-          value={values.name}
-          onChange={(e: { target: { name: string; value: string } }) => {
-            setValues({ ...values, [e.target.name]: e.target.value });
-          }}
-          fullWidth
-          sx={{ height: "56px", marginButton: "10px" }}
-          error={formSubmitted && !values.name?.trim()}
-        />
-        {formSubmitted && !values.name?.trim() && (
-          <FormHelperText error>This field is required.</FormHelperText>
+        {screen === "start" && (
+          
         )}
-
-        <TextField
-          label="Age"
-          variant="outlined"
-          name="age"
-          value={values.info.age !== 0 ? values.info.age : ""}
-          onChange={(e: { target: { name: string; value: string } }) => {
-            setValues({
-              ...values,
-              info: {
-                ...values.info,
-                [e.target.name]: Number(e.target.value),
-              } as PersonalInfo["info"],
-            });
-          }}
-          fullWidth
-          sx={{ height: "56px", marginBottom: "10px" }}
-          error={formSubmitted && !values.info?.age}
-        />
-        {formSubmitted && !values.info?.age && (
-          <FormHelperText error>This field is required.</FormHelperText>
-        )}
-
-        {questions.map((question, index) => (
-          <Fragment key={index}>
-            <TextField
-              label={question[1]}
-              variant="outlined"
-              name={question[0]}
-              value={
-                values.info
-                  ? values.info[question[0] as keyof PersonalInfo["info"]] || ""
-                  : ""
-              }
-              onChange={(e: { target: { name: string; value: string } }) => {
-                setValues({
-                  ...values,
-                  info: {
-                    ...values.info,
-                    [e.target.name]: e.target.value,
-                  } as PersonalInfo["info"],
-                });
-              }}
-              fullWidth
-              sx={{ height: "56px", marginBottom: "10px" }}
-              error={
-                formSubmitted &&
-                !values.info?.[question[0] as keyof PersonalInfo["info"]]
-              }
-            />
-            {formSubmitted &&
-              !values.info?.[question[0] as keyof PersonalInfo["info"]] && (
-                <FormHelperText error>This field is required.</FormHelperText>
-              )}
-          </Fragment>
-        ))}
+        {screen === "health conditions" &&
+          questions.map((question, index) => (
+            <Fragment key={index}>
+              <TextField
+                label={question[1]}
+                variant="outlined"
+                name={question[0]}
+                value={
+                  values.info
+                    ? values.info[question[0] as keyof PersonalInfo["info"]] ||
+                      ""
+                    : ""
+                }
+                onChange={(e: { target: { name: string; value: string } }) => {
+                  setValues({
+                    ...values,
+                    info: {
+                      ...values.info,
+                      [e.target.name]: e.target.value,
+                    } as PersonalInfo["info"],
+                  });
+                }}
+                fullWidth
+                sx={{ height: "56px", marginBottom: "10px" }}
+                error={
+                  formSubmitted &&
+                  !values.info?.[question[0] as keyof PersonalInfo["info"]]
+                }
+              />
+              {formSubmitted &&
+                !values.info?.[question[0] as keyof PersonalInfo["info"]] && (
+                  <FormHelperText error>This field is required.</FormHelperText>
+                )}
+            </Fragment>
+          ))}
         <Button
           type="submit"
           variant="contained"
