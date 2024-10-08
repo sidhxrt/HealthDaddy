@@ -23,20 +23,6 @@ export default function Scan() {
 
       getScore({ ingredients: ocrText, personInfo: personalInfo.info }).then(
         (data) => {
-          // const data = {
-          //   safety_score: 70,
-          //   caution_message:
-          //     "Contains soy and wheat; may trigger allergies. Alcohol consumption can exacerbate potential health risks.",
-          //   short_term_effects: [
-          //     "Risk of allergic reactions, such as hives or gastrointestinal discomfort",
-          //     "Possible bloating or upset stomach from the ingredients ",
-          //   ],
-          //   long_term_effects: [
-          //     "Regular consumption may contribute to weight gain due to high sugar and unhealthy fats",
-          //     "Ongoing exposure to allergens could worsen sensitivities over time",
-          //   ],
-          //   environmental_score: 60,
-          // };
 
           const queryParams = new URLSearchParams(
             Object.entries(data).reduce((acc, [key, value]) => {

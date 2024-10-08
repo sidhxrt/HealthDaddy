@@ -4,9 +4,10 @@ import Cached from "@mui/icons-material/Cached";
 import CameraAlt from "@mui/icons-material/CameraAlt";
 import Close from "@mui/icons-material/Close";
 import Done from "@mui/icons-material/Done";
-import { Stack } from "@mui/material";
-import { SetStateAction, useRef, useState } from "react";
+import { Box, Stack, useMediaQuery } from "@mui/material";
+import { SetStateAction, useEffect, useRef, useState } from "react";
 import { Camera, CameraType } from "react-camera-pro";
+import { AspectRatio } from "react-camera-pro/dist/components/Camera/types";
 
 interface WebCamProps {
   image: string | null;
@@ -21,6 +22,18 @@ export default function WebCam({
 }: WebCamProps) {
   const [numberOfCameras, setNumberOfCameras] = useState(0);
   const camera = useRef<CameraType>(null);
+  const mobileScreen = useMediaQuery("(min-width: 600px)");
+  const [ratio, setRatio] = useState<AspectRatio>();
+
+  useEffect(() => {
+    //set ratio camera
+    if (mobileScreen) {
+      setRatio(4 / 3);
+    } else {
+      // setRatio("cover");
+      setRatio(9 / 18);
+    }
+  }, [mobileScreen, ratio]);
 
   const capture = () => {
     if (camera.current) {
@@ -82,9 +95,25 @@ export default function WebCam({
       ) : (
         <>
           <Stack width={"100%"} height={"100%"} overflow={"hidden"}>
+            <Box
+              sx={{
+                position: "absolute",
+                zIndex: 3,
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%,-65%)",
+                minWidth: "70%",
+                minHeight: "60%",
+                borderRadius: "5px",
+                background: ` conic-gradient(from 90deg  at top    5px left  5px,#0000 90deg,white 0) 0    0    / 40px 40px border-box no-repeat,
+                              conic-gradient(from 180deg at top    5px right 5px,#0000 90deg,white 0) 100% 0    / 40px 40px border-box no-repeat,
+                              conic-gradient(from 0deg   at bottom 5px left  5px,#0000 90deg,white 0) 0    100% / 40px 40px border-box no-repeat,
+                              conic-gradient(from -90deg at bottom 5px right 5px,#0000 90deg,white 0) 100% 100% / 40px 40px border-box no-repeat`,
+              }}
+            />
             <Camera
               ref={camera}
-              aspectRatio="cover"
+              aspectRatio={ratio}
               numberOfCamerasCallback={setNumberOfCameras}
               errorMessages={{
                 noCameraAccessible:
