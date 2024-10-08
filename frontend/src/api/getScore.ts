@@ -14,8 +14,9 @@ export interface getScoreResultModel {
 }
 
 export default async function getScore(data: getScoreModel) {
+  const payload = JSON.stringify(data);
   try {
-    const response = await baseApi.post("/check", data);
+    const response = await baseApi.post("/check", payload);
     return response.data;
   } catch (error) {
     console.error(error);
