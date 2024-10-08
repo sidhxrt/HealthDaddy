@@ -3,14 +3,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import NameNAgeFields from "@/pageComponents/UserOnboarding/NameNAgeFields";
 
 import useInfoDb, { PersonalInfo } from "@/utils/data";
-import {
-  Stack,
-  TextField,
-  Typography,
-  Container,
-  Button,
-  FormHelperText,
-} from "@mui/material";
+import { Stack, TextField, Button, FormHelperText } from "@mui/material";
 
 import { useRouter } from "next/navigation";
 
@@ -24,7 +17,7 @@ export default function Home() {
     ["diet_restrictions", "Are you following any dietary restrictions?"],
   ];
   const db = useInfoDb();
-  const router = useRouter();
+  const router = useRouter(); 
 
   useEffect(() => {
     db.fetchInfo().then((res) => {
@@ -70,15 +63,12 @@ export default function Home() {
   };
 
   return (
-    <Container maxWidth="sm">
+    <Stack height={"100vh"} justifyContent={"center"} overflow={"auto"}>
       <Stack
         sx={{
+          px: { xs: "20px", sm: "30%" },
           gap: "10px",
-          width: "400px",
-          alignItems: "center",
           justifyContent: "center",
-          display: "flex",
-          height: "100vh",
         }}
       >
         {screen === "start" && (
@@ -89,7 +79,6 @@ export default function Home() {
             formSubmitted={formSubmitted}
           />
         )}
-
         {screen === "health conditions" &&
           questions.map((question, index) => (
             <Fragment key={index}>
@@ -135,6 +124,6 @@ export default function Home() {
           Submit
         </Button>
       </Stack>
-    </Container>
+    </Stack>
   );
 }

@@ -11,18 +11,17 @@ export default function CircleIconButton({
   onClick,
   disabled,
   sx,
+  ...other
 }: CircleIconButtonProps) {
   return (
     <IconButton
-      disabled={disabled}
+      {...other}
       sx={{
         width: "70px",
         height: "70px",
         border: "double 2px grey",
         backgroundColor: "white",
-        ...sx,
       }}
-      onClick={onClick}
     >
       {Icon}
     </IconButton>
