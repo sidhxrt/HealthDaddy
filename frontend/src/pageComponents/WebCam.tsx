@@ -1,11 +1,11 @@
 "use client";
 import CircleIconButton from "@/app/components/CircleIconButton";
-import Download from "@mui/icons-material/Download";
 import Cached from "@mui/icons-material/Cached";
 import CameraAlt from "@mui/icons-material/CameraAlt";
 import Close from "@mui/icons-material/Close";
 import Done from "@mui/icons-material/Done";
-import { Box, Stack, useMediaQuery } from "@mui/material";
+import Upload from "@mui/icons-material/Upload";
+import { Box, Button, Stack, useMediaQuery } from "@mui/material";
 import { SetStateAction, useEffect, useRef, useState } from "react";
 import { Camera, CameraType } from "react-camera-pro";
 import { AspectRatio } from "react-camera-pro/dist/components/Camera/types";
@@ -140,20 +140,27 @@ export default function WebCam({
             }}
           >
             <CircleIconButton
-              tabIndex={-1}
               component="label"
               role={undefined}
-              Icon={
-                <>
-                  <Download fontSize={"large"} />
-                  <VisuallyHiddenInput
-                    type="image"
-                    onChange={(event) => console.log(event.target.files)}
-                  />
-                </>
-              }
-              onClick={capture}
-            />
+              tabIndex={-1}
+              Icon={<Upload fontSize="large" />}
+            >
+              <VisuallyHiddenInput
+                type="file"
+                accept="image/*"
+                onChange={(event) => {
+                  const file = event.target.files?.[0];
+                  if (file) {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                      const base64String = reader.result as string;
+                      setImage(base64String);
+                    };
+                    reader.readAsDataURL(file);
+                  }
+                }}
+              />
+            </CircleIconButton>
             <CircleIconButton
               Icon={<CameraAlt fontSize={"large"} />}
               onClick={capture}

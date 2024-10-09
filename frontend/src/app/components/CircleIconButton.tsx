@@ -11,6 +11,7 @@ export default function CircleIconButton({
   onClick,
   disabled,
   sx,
+  children,
   ...other
 }: CircleIconButtonProps) {
   return (
@@ -24,6 +25,7 @@ export default function CircleIconButton({
       }}
     >
       {Icon}
+      {children}
     </IconButton>
   );
 }
