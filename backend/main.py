@@ -24,7 +24,8 @@ origins = [
     "http://localhost",
     "http://localhost:8080",
     "http://localhost:3000",
-    "https://google-gen-ai-x.vercel.app"
+    "https://healthdaddy.vercel.app",
+    "https://dev-healthdaddy.vercel.app"
 ]
 
 app.add_middleware(

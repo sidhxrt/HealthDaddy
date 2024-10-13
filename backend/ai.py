@@ -48,8 +48,9 @@ def productInfo(personInfo, ingredients):
         llm = ChatGoogleGenerativeAI(model="gemini-1.5-pro", temperature=0.2, max_toxens=500)
         system_prompt = (
             "As a certified nutritionist, you are to evaluate a specific food product based on the following standards."
-            "I will provide information about an individual's dietary preferences and a list of ingredients for the product in question. "
-            "Please compare the ingredient list with the established standards and provide the following in the exact format specified:"
+            "I will provide you with a variable called References, which contains examples of user profiles, food ingredients, and safety scores. The safety scores are calculated using a specific formula based on the user profiles and ingredients."
+            "I will be providing you a user's profile along with an ingredient list. Take the references variable as an example and train yourself to calculate the safety score of other food items when you're provided with user profiles and ingredient list of those food items."
+            "Thereafter, provide me the following in the format specified."
             "safety_score = [one percentage value in array],"
             "caution_message = ['caution message'],"
             "short_term_effects = ['effect1', 'effect2', 'effect3'],"

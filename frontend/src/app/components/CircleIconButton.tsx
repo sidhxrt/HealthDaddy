@@ -8,23 +8,22 @@ interface CircleIconButtonProps extends IconButtonProps {
 
 export default function CircleIconButton({
   Icon,
-  onClick,
-  disabled,
-  sx,
+  children,
+  ...other
 }: CircleIconButtonProps) {
   return (
     <IconButton
-      disabled={disabled}
+      {...other}
       sx={{
         width: "70px",
         height: "70px",
-        border: "double 2px grey",
+        borderRadius: "20px",
+        border: "double 2px black",
         backgroundColor: "white",
-        ...sx,
       }}
-      onClick={onClick}
     >
       {Icon}
+      {children}
     </IconButton>
   );
 }
