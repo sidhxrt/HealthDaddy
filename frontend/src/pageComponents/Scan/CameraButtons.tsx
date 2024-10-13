@@ -1,8 +1,6 @@
 import React from "react";
 
-import Cached from "@mui/icons-material/Cached";
-import CameraAlt from "@mui/icons-material/CameraAlt";
-import Upload from "@mui/icons-material/Upload";
+import { Cached, Lens, UploadRounded } from "@mui/icons-material";
 
 import VisuallyHiddenInput from "@/app/components/VisuallyHiddenInput";
 import CircleIconButton from "@/app/components/CircleIconButton";
@@ -35,9 +33,9 @@ export const CaptureButtons: React.FC<CaptureButtonsProps> = ({
     <>
       <CircleIconButton
         component="label"
-        role={undefined}
+        color="primary"
         tabIndex={-1}
-        Icon={<Upload fontSize="large" />}
+        Icon={<UploadRounded fontSize="large" />}
       >
         <VisuallyHiddenInput
           type="file"
@@ -47,12 +45,14 @@ export const CaptureButtons: React.FC<CaptureButtonsProps> = ({
       </CircleIconButton>
 
       <CircleIconButton
-        Icon={<CameraAlt fontSize="large" />}
+        color="primary"
+        Icon={<Lens fontSize="large" />}
         onClick={capture}
       />
 
       <CircleIconButton
         disabled={numberOfCameras <= 1}
+        color="primary"
         Icon={<Cached fontSize="large" />}
         onClick={changeCam}
       />

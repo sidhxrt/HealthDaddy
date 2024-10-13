@@ -1,11 +1,6 @@
 import { PersonalInfo } from "@/utils/data";
 import { ArrowRightAlt } from "@mui/icons-material";
-import {
-  FormHelperText,
-  TextField,
-  Typography,
-  Button,
-} from "@mui/material";
+import { FormHelperText, TextField, Typography, Button } from "@mui/material";
 
 interface NameNAgeFieldsProps {
   setScreen: (screen: string) => void;
@@ -45,13 +40,14 @@ export default function NameNAgeFields({
         name="age"
         value={values.info.age !== 0 ? values.info.age : ""}
         onChange={(e: { target: { name: string; value: string } }) => {
-          setValues({
-            ...values,
-            info: {
-              ...values.info,
-              [e.target.name]: Number(e.target.value),
-            } as PersonalInfo["info"],
-          });
+          if (!isNaN(Number(e.target.value)))
+            setValues({
+              ...values,
+              info: {
+                ...values.info,
+                age: Number(e.target.value),
+              },
+            });
         }}
         fullWidth
         sx={{ height: "56px", marginBottom: "10px" }}
@@ -62,10 +58,13 @@ export default function NameNAgeFields({
       )}
       {values.name !== "" && values.info.age !== 0 && (
         <Button
+          variant="contained"
+          color="secondary"
           onClick={() => {
             setScreen("health conditions");
           }}
         >
+          Continue
           <ArrowRightAlt />
         </Button>
       )}

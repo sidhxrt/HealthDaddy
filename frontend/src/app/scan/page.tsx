@@ -23,8 +23,6 @@ export default function Scan() {
           router.push("/");
         }
         console.log(personalInfo);
-        console.log(process.env.NEXT_PUBLIC_BASE_URL);
-
         const responseData = await getScore({
           ingredients: ocrText,
           personInfo: personalInfo.info,
