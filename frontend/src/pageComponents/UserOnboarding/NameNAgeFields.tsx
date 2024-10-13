@@ -5,7 +5,6 @@ import {
   TextField,
   Typography,
   Button,
-  ButtonGroup,
 } from "@mui/material";
 
 interface NameNAgeFieldsProps {

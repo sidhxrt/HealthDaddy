@@ -5,7 +5,7 @@ import CameraAlt from "@mui/icons-material/CameraAlt";
 import Close from "@mui/icons-material/Close";
 import Done from "@mui/icons-material/Done";
 import Upload from "@mui/icons-material/Upload";
-import { Box, Button, Stack, useMediaQuery } from "@mui/material";
+import { Box, Stack, useMediaQuery } from "@mui/material";
 import { SetStateAction, useEffect, useRef, useState } from "react";
 import { Camera, CameraType } from "react-camera-pro";
 import { AspectRatio } from "react-camera-pro/dist/components/Camera/types";
