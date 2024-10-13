@@ -6,7 +6,6 @@ import Upload from "@mui/icons-material/Upload";
 
 import VisuallyHiddenInput from "@/app/components/VisuallyHiddenInput";
 import CircleIconButton from "@/app/components/CircleIconButton";
-import { Stack } from "@mui/material";
 
 interface CaptureButtonsProps {
   capture: () => void;

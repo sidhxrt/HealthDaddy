@@ -1,7 +1,7 @@
 import { Camera, CameraType } from "react-camera-pro";
 import CameraAlignmentBox from "./CameraAlignmentBox";
 import { AspectRatio } from "react-camera-pro/dist/components/Camera/types";
-import { Ref, SetStateAction } from "react";
+import { SetStateAction } from "react";
 
 interface CameraModuleProps {
   camera: React.RefObject<CameraType>;
