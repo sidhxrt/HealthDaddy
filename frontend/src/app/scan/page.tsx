@@ -25,19 +25,19 @@ export default function Scan() {
         console.log(personalInfo);
         console.log(process.env.NEXT_PUBLIC_BASE_URL);
 
-        getScore({ ingredients: ocrText, personInfo: personalInfo.info }).then(
-          (data) => {
-            const queryParams = new URLSearchParams(
-              Object.entries(data).reduce((acc, [key, value]) => {
-                acc[key] = Array.isArray(value)
-                  ? value.join(",")
-                  : String(value);
-                return acc;
-              }, {} as Record<string, string>)
-            ).toString();
-            router.push(`/scan/result?${queryParams}`);
-          }
-        );
+        const responseData = await getScore({
+          ingredients: ocrText,
+          personInfo: personalInfo.info,
+        });
+
+        const queryParams = new URLSearchParams(
+          Object.entries(responseData).reduce((acc, [key, value]) => {
+            acc[key] = Array.isArray(value) ? value.join(",") : String(value);
+            return acc;
+          }, {} as Record<string, string>)
+        ).toString();
+        
+        router.push(`/scan/result?${queryParams}`);
       } catch (error) {
         setProcessing(false);
         console.error(error);
