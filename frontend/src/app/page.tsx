@@ -17,7 +17,7 @@ export default function Home() {
     ["diet_restrictions", "Are you following any dietary restrictions?"],
   ];
   const db = useInfoDb();
-  const router = useRouter(); 
+  const router = useRouter();
 
   useEffect(() => {
     db.fetchInfo().then((res) => {
@@ -114,15 +114,17 @@ export default function Home() {
                 )}
             </Fragment>
           ))}
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          sx={{ width: "100%" }}
-          onClick={handleSubmit}
-        >
-          Submit
-        </Button>
+        {screen === "health conditions" && (
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            sx={{ width: "100%" }}
+            onClick={handleSubmit}
+          >
+            Submit
+          </Button>
+        )}
       </Stack>
     </Stack>
   );
