@@ -17,8 +17,7 @@ export default function CircleIconButton({
       sx={{
         width: "70px",
         height: "70px",
-        borderRadius: "20px",
-        border: "double 2px black",
+        border: "solid 2px black",
         backgroundColor: "white",
       }}
     >

@@ -1,6 +1,6 @@
-import Box from '@mui/material/Box';
-import LinearProgress from '@mui/material/LinearProgress';
-import React from 'react';
+import Box from "@mui/material/Box";
+import LinearProgress from "@mui/material/LinearProgress";
+import React from "react";
 
 export default function LinearLoaderAuto() {
   const [progress, setProgress] = React.useState(0);
@@ -30,8 +30,13 @@ export default function LinearLoaderAuto() {
   }, []);
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <LinearProgress variant="buffer" value={progress} valueBuffer={buffer} />
+    <Box sx={{ width: "100%" }}>
+      <LinearProgress
+        variant="buffer"
+        color="secondary"
+        value={progress}
+        valueBuffer={buffer}
+      />
     </Box>
   );
 }
