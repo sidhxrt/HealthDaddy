@@ -22,7 +22,7 @@ export default function Scan() {
         if (!personalInfo) {
           router.push("/");
         }
-        console.log(personalInfo);
+        console.log(ocrText, personalInfo);
         const responseData = await getScore({
           ingredients: ocrText,
           personInfo: personalInfo.info,
@@ -34,8 +34,9 @@ export default function Scan() {
             return acc;
           }, {} as Record<string, string>)
         ).toString();
-        
+
         router.push(`/scan/result?${queryParams}`);
+        setProcessing(false);
       } catch (error) {
         setProcessing(false);
         console.error(error);

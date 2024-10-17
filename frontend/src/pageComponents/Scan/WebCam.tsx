@@ -6,7 +6,7 @@ import { Stack, useMediaQuery } from "@mui/material";
 import { SetStateAction, useEffect, useRef, useState } from "react";
 import { CameraType } from "react-camera-pro";
 import { AspectRatio } from "react-camera-pro/dist/components/Camera/types";
-import CameraModule from "./CameraComponent";
+import CameraModule from "./CameraModule";
 import { CaptureButtons } from "./CameraButtons";
 import LinearLoaderAuto from "@/app/components/LinearLoaderAuto";
 
@@ -16,7 +16,6 @@ interface WebCamProps {
   getScoreAndRedirect: () => void;
   processing: boolean;
   setProcessing: React.Dispatch<SetStateAction<boolean>>;
-
 }
 
 export default function WebCam({
@@ -24,7 +23,7 @@ export default function WebCam({
   setImage,
   getScoreAndRedirect,
   processing,
-  setProcessing
+  setProcessing,
 }: WebCamProps) {
   const [numberOfCameras, setNumberOfCameras] = useState(0);
   const camera = useRef<CameraType>(null);
@@ -64,7 +63,7 @@ export default function WebCam({
     >
       {image ? (
         <img
-          style={{ height: "80%", width: "100%" }}
+          style={{ height: "80%" }}
           src={image}
           alt="Screenshot"
         />
