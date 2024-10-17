@@ -8,14 +8,12 @@ import CircleIconButton from "@/app/components/CircleIconButton";
 interface CaptureButtonsProps {
   capture: () => void;
   changeCam: () => void;
-  numberOfCameras: number;
   setImage: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 export const CaptureButtons: React.FC<CaptureButtonsProps> = ({
   capture,
   changeCam,
-  numberOfCameras,
   setImage,
 }) => {
   const saveImage = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -51,7 +49,7 @@ export const CaptureButtons: React.FC<CaptureButtonsProps> = ({
       />
 
       <CircleIconButton
-        disabled={numberOfCameras <= 1}
+        disabled={true}
         color="primary"
         Icon={<Cached fontSize="large" />}
         onClick={changeCam}

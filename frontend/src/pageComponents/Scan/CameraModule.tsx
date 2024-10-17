@@ -1,36 +1,60 @@
-import { Camera, CameraType } from "react-camera-pro";
+import Webcam from "react-webcam";
 import CameraAlignmentBox from "./CameraAlignmentBox";
-import { AspectRatio } from "react-camera-pro/dist/components/Camera/types";
-import { SetStateAction } from "react";
+import { SetStateAction, useEffect, useRef, useState } from "react";
+import { Stack } from "@mui/material";
+import { CaptureButtons } from "./CameraButtons";
 
 interface CameraModuleProps {
-  camera: React.RefObject<CameraType>;
-  ratio: AspectRatio;
-  setNumberOfCameras: React.Dispatch<SetStateAction<number>>;
+  setImage: React.Dispatch<SetStateAction<string | null>>;
 }
 
-export default function CameraModule({
-  camera,
-  ratio,
-  setNumberOfCameras,
-}: CameraModuleProps) {
+export default function CameraModule({ setImage }: CameraModuleProps) {
+  const camera = useRef<Webcam>(null);
+  const [videoConstraints, setVideoConstraints] = useState({
+    height: 4096,
+    width: 2160,
+    facingMode: "environment",
+  });
+
+  const capture = () => {
+    if (camera.current) {
+      const photo = camera.current?.getScreenshot() as string;
+      setImage(photo);
+    }
+  };
+
+  const changeCam = () => {
+    if (camera.current) {
+    }
+  };
+
   return (
     <>
       <CameraAlignmentBox />
-      <Camera
+      <Webcam
+        style={{ width: "100%", height: "80%" }}
         ref={camera}
-        aspectRatio={ratio}
-        numberOfCamerasCallback={setNumberOfCameras}
-        errorMessages={{
-          noCameraAccessible:
-            "No camera device accessible. Please connect your camera or try a different browser.",
-          permissionDenied:
-            "Permission denied. Please refresh and give camera permission.",
-          switchCamera:
-            "It is not possible to switch camera to different one because there is only one video device accessible.",
-          canvas: "Canvas is not supported.",
+        imageSmoothing={false}
+        screenshotQuality={1}
+        videoConstraints={videoConstraints}
+      ></Webcam>
+      <Stack
+        sx={{
+          width: "100%",
+          height: "20%",
+          marginTop: "auto",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "row",
+          gap: "10px",
         }}
-      />
+      >
+        <CaptureButtons
+          capture={capture}
+          changeCam={changeCam}
+          setImage={setImage}
+        />
+      </Stack>
     </>
   );
 }
