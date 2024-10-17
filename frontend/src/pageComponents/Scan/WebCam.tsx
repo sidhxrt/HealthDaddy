@@ -16,7 +16,6 @@ interface WebCamProps {
   getScoreAndRedirect: () => void;
   processing: boolean;
   setProcessing: React.Dispatch<SetStateAction<boolean>>;
-
 }
 
 export default function WebCam({
@@ -24,7 +23,7 @@ export default function WebCam({
   setImage,
   getScoreAndRedirect,
   processing,
-  setProcessing
+  setProcessing,
 }: WebCamProps) {
   const [numberOfCameras, setNumberOfCameras] = useState(0);
   const camera = useRef<CameraType>(null);

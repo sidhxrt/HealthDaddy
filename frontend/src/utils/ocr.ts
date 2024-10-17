@@ -1,17 +1,19 @@
 import { createWorker } from "tesseract.js";
 import { toRadians } from "./utils";
+import scaleImage from "./scaleImage";
 
 export default async function getTextFromImg(image: string) {
-  const worker = await createWorker("eng", 2, {
+  const worker = await createWorker("eng", undefined, {
     legacyCore: true,
     legacyLang: true,
   });
   worker.setParameters({ user_defined_dpi: "300" });
-  const { data } = await worker.detect(image);
-  console.log(toRadians(data.orientation_degrees));
+  const resizedImage = await scaleImage(image);
+
+  const { data } = await worker.detect(resizedImage);
 
   const ocrData = await worker.recognize(
-    image,
+    resizedImage,
     {
       rotateRadians: toRadians(data.orientation_degrees) ?? 0,
     },

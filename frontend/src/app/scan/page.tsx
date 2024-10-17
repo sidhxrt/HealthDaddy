@@ -1,6 +1,6 @@
 "use client";
 
-import getScore from "@/api/getScore";
+// import getScore from "@/api/getScore";
 import WebCam from "@/pageComponents/Scan/WebCam";
 import useInfoDb from "@/utils/data";
 import getTextFromImg from "@/utils/ocr";
@@ -22,20 +22,20 @@ export default function Scan() {
         if (!personalInfo) {
           router.push("/");
         }
-        console.log(personalInfo);
-        const responseData = await getScore({
-          ingredients: ocrText,
-          personInfo: personalInfo.info,
-        });
+        console.log(ocrText, personalInfo);
+        // const responseData = await getScore({
+        //   ingredients: ocrText,
+        //   personInfo: personalInfo.info,
+        // });
 
-        const queryParams = new URLSearchParams(
-          Object.entries(responseData).reduce((acc, [key, value]) => {
-            acc[key] = Array.isArray(value) ? value.join(",") : String(value);
-            return acc;
-          }, {} as Record<string, string>)
-        ).toString();
-        
-        router.push(`/scan/result?${queryParams}`);
+        // const queryParams = new URLSearchParams(
+        //   Object.entries(responseData).reduce((acc, [key, value]) => {
+        //     acc[key] = Array.isArray(value) ? value.join(",") : String(value);
+        //     return acc;
+        //   }, {} as Record<string, string>)
+        // ).toString();
+
+        // router.push(`/scan/result?${queryParams}`);
         setProcessing(false);
       } catch (error) {
         setProcessing(false);

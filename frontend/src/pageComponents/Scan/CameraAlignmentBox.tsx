@@ -7,20 +7,17 @@ export default function CameraAlignmentBox() {
       sx={{
         position: "absolute",
         zIndex: 3,
-        top: "45%",
+        top: "53%",
         left: "50%",
         transform: "translate(-50%,-70%)",
-        minWidth: "70%",
-        height: "50%",
+        minWidth: "85%",
+        height: "65%",
         borderRadius: "5px",
         display: "flex",
         flexDirection: "column",
         textAlign: "center",
       }}
     >
-      <Typography variant="h5" color="secondary">
-        Scan the Ingredients
-      </Typography>
       <Box
         sx={{
           width: "100%",
@@ -30,7 +27,11 @@ export default function CameraAlignmentBox() {
       conic-gradient(from 0deg   at bottom 5px left  5px,#0000 90deg,${theme.palette.secondary.light} 0) 0    100% / 40px 40px border-box no-repeat,
       conic-gradient(from -90deg at bottom 5px right 5px,#0000 90deg,${theme.palette.secondary.light} 0) 100% 100% / 40px 40px border-box no-repeat`,
         }}
-      />
+      >
+        <Typography variant="h5" color="secondary">
+          Scan the Ingredients
+        </Typography>
+      </Box>
     </Box>
   );
 }

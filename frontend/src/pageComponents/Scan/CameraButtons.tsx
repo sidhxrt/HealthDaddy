@@ -22,7 +22,7 @@ export const CaptureButtons: React.FC<CaptureButtonsProps> = ({
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => {
+      reader.onloadend = async () => {
         const base64String = reader.result as string;
         setImage(base64String);
       };
