@@ -6,7 +6,7 @@ import { Stack, useMediaQuery } from "@mui/material";
 import { SetStateAction, useEffect, useRef, useState } from "react";
 import { CameraType } from "react-camera-pro";
 import { AspectRatio } from "react-camera-pro/dist/components/Camera/types";
-import CameraModule from "./CameraComponent";
+import CameraModule from "./CameraModule";
 import { CaptureButtons } from "./CameraButtons";
 import LinearLoaderAuto from "@/app/components/LinearLoaderAuto";
 

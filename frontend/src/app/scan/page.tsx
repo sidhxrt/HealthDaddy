@@ -18,24 +18,25 @@ export default function Scan() {
     if (image) {
       try {
         const ocrText = await getTextFromImg(image);
-        const personalInfo = await db.fetchInfo();
-        if (!personalInfo) {
-          router.push("/");
-        }
-        console.log(personalInfo);
-        const responseData = await getScore({
-          ingredients: ocrText,
-          personInfo: personalInfo.info,
-        });
+        // const personalInfo = await db.fetchInfo();
+        // if (!personalInfo) {
+        //   router.push("/");
+        // }
+        // console.log(personalInfo);
+        // const responseData = await getScore({
+        //   ingredients: ocrText,
+        //   personInfo: personalInfo.info,
+        // });
 
-        const queryParams = new URLSearchParams(
-          Object.entries(responseData).reduce((acc, [key, value]) => {
-            acc[key] = Array.isArray(value) ? value.join(",") : String(value);
-            return acc;
-          }, {} as Record<string, string>)
-        ).toString();
+        // const queryParams = new URLSearchParams(
+        //   Object.entries(responseData).reduce((acc, [key, value]) => {
+        //     acc[key] = Array.isArray(value) ? value.join(",") : String(value);
+        //     return acc;
+        //   }, {} as Record<string, string>)
+        // ).toString();
         
-        router.push(`/scan/result?${queryParams}`);
+        // router.push(`/scan/result?${queryParams}`);
+        setProcessing(false);
       } catch (error) {
         setProcessing(false);
         console.error(error);
