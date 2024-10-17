@@ -2,10 +2,9 @@
 import CircleIconButton from "@/app/components/CircleIconButton";
 import Close from "@mui/icons-material/Close";
 import Done from "@mui/icons-material/Done";
-import { Stack, useMediaQuery } from "@mui/material";
-import { SetStateAction, useEffect, useRef, useState } from "react";
+import { Stack } from "@mui/material";
+import { SetStateAction } from "react";
 import CameraModule from "./CameraModule";
-import { CaptureButtons } from "./CameraButtons";
 import LinearLoaderAuto from "@/app/components/LinearLoaderAuto";
 import Webcam from "react-webcam";
 

@@ -1,6 +1,6 @@
 import Webcam from "react-webcam";
 import CameraAlignmentBox from "./CameraAlignmentBox";
-import { SetStateAction, useEffect, useRef, useState } from "react";
+import { SetStateAction, useRef } from "react";
 import { Stack } from "@mui/material";
 import { CaptureButtons } from "./CameraButtons";
 
@@ -10,11 +10,11 @@ interface CameraModuleProps {
 
 export default function CameraModule({ setImage }: CameraModuleProps) {
   const camera = useRef<Webcam>(null);
-  const [videoConstraints, setVideoConstraints] = useState({
+  const videoConstraints = {
     height: 4096,
     width: 2160,
     facingMode: "environment",
-  });
+  };
 
   const capture = () => {
     if (camera.current) {
