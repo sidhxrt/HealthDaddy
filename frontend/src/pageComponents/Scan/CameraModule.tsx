@@ -1,68 +1,36 @@
-import Webcam from "react-webcam";
+import { Camera, CameraType } from "react-camera-pro";
 import CameraAlignmentBox from "./CameraAlignmentBox";
-import { SetStateAction, useEffect, useRef, useState } from "react";
-import { Stack } from "@mui/material";
-import { CaptureButtons } from "./CameraButtons";
+import { AspectRatio } from "react-camera-pro/dist/components/Camera/types";
+import { SetStateAction } from "react";
 
 interface CameraModuleProps {
-  setImage: React.Dispatch<SetStateAction<string | null>>;
+  camera: React.RefObject<CameraType>;
+  ratio: AspectRatio;
+  setNumberOfCameras: React.Dispatch<SetStateAction<number>>;
 }
 
-export default function CameraModule({ setImage }: CameraModuleProps) {
-  const camera = useRef<Webcam>(null);
-  const [videoConstraints, setVideoConstraints] =
-    useState<MediaTrackConstraints>({
-      height: { ideal: 4096 },
-      width: { ideal: 2160 },
-      facingMode: { ideal: "environment" },
-    });
-  useEffect(() => {
-    setVideoConstraints({
-      height: { ideal: screen.height * 0.78 },
-      width: { ideal: screen.width },
-      facingMode: { ideal: "environment" },
-    });
-  }, [screen.height, screen.width]);
-
-  const capture = () => {
-    if (camera.current) {
-      const photo = camera.current?.getScreenshot() as string;
-      setImage(photo);
-    }
-  };
-
-  const changeCam = () => {
-    if (camera.current) {
-    }
-  };
-
+export default function CameraModule({
+  camera,
+  ratio,
+  setNumberOfCameras,
+}: CameraModuleProps) {
   return (
     <>
       <CameraAlignmentBox />
-      <Webcam
-        style={{ width: "100%", height: "80%" }}
+      <Camera
         ref={camera}
-        imageSmoothing={false}
-        screenshotQuality={1}
-        videoConstraints={videoConstraints}
-      ></Webcam>
-      <Stack
-        sx={{
-          width: "100%",
-          height: "20%",
-          marginTop: "auto",
-          alignItems: "center",
-          justifyContent: "center",
-          flexDirection: "row",
-          gap: "10px",
+        aspectRatio={ratio}
+        numberOfCamerasCallback={setNumberOfCameras}
+        errorMessages={{
+          noCameraAccessible:
+            "No camera device accessible. Please connect your camera or try a different browser.",
+          permissionDenied:
+            "Permission denied. Please refresh and give camera permission.",
+          switchCamera:
+            "It is not possible to switch camera to different one because there is only one video device accessible.",
+          canvas: "Canvas is not supported.",
         }}
-      >
-        <CaptureButtons
-          capture={capture}
-          changeCam={changeCam}
-          setImage={setImage}
-        />
-      </Stack>
+      />
     </>
   );
 }

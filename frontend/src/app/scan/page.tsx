@@ -18,17 +18,15 @@ export default function Scan() {
     if (image) {
       try {
         const ocrText = await getTextFromImg(image);
-
-        const personalInfo = await db.fetchInfo();
-        if (!personalInfo) {
-          router.push("/");
-        }
-        console.log(personalInfo);
-        const responseData = await getScore({
-          ingredients: ocrText,
-          personInfo: personalInfo.info,
-        });
-        console.log(responseData);
+        // const personalInfo = await db.fetchInfo();
+        // if (!personalInfo) {
+        //   router.push("/");
+        // }
+        // console.log(personalInfo);
+        // const responseData = await getScore({
+        //   ingredients: ocrText,
+        //   personInfo: personalInfo.info,
+        // });
 
         // const queryParams = new URLSearchParams(
         //   Object.entries(responseData).reduce((acc, [key, value]) => {
@@ -36,7 +34,7 @@ export default function Scan() {
         //     return acc;
         //   }, {} as Record<string, string>)
         // ).toString();
-
+        
         // router.push(`/scan/result?${queryParams}`);
         setProcessing(false);
       } catch (error) {
