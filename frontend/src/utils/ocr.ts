@@ -7,11 +7,10 @@ export default async function getTextFromImg(image: string) {
   });
   worker.setParameters({ user_defined_dpi: "300" });
 
-  const { data } = await worker.detect(await scaleImage(image, 1600));
-  console.log(data);
+  const { data:{orientation_degrees} } = await worker.detect(await scaleImage(image, 1600));
 
   const ocrData = await worker.recognize(
-    await scaleImage(image, 3000, data.orientation_degrees ?? 0),
+    await scaleImage(image, 3000, orientation_degrees ?? 0),
     {},
     { text: true }
   );
