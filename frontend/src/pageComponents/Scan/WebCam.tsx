@@ -63,7 +63,7 @@ export default function WebCam({
     >
       {image ? (
         <img
-          style={{ height: "80%", width: "100%" }}
+          style={{ height: "80%" }}
           src={image}
           alt="Screenshot"
         />

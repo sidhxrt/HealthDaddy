@@ -1,8 +1,10 @@
 import FileResizer from "react-image-file-resizer";
 
-const IMG_SCALE = 3072;
-
-export default async function scaleImage(image: string) {
+export default async function scaleImage(
+  image: string,
+  scale: number,
+  rotation?: number
+) {
   const blob = b64toBlob(image);
   const dimensions = await getPngDimensions(image);
   const aspectRatio = dimensions.width / dimensions.height;
@@ -10,11 +12,11 @@ export default async function scaleImage(image: string) {
   return new Promise<string>((resolve) => {
     FileResizer.imageFileResizer(
       blob,
-      aspectRatio * IMG_SCALE,
-      aspectRatio * IMG_SCALE,
+      aspectRatio * scale,
+      aspectRatio * scale,
       "PNG",
       100,
-      0,
+      rotation ?? 0,
       (uri) => {
         resolve(uri as string);
       },
