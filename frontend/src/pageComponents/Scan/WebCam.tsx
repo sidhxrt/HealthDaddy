@@ -6,7 +6,6 @@ import { Stack } from "@mui/material";
 import { SetStateAction } from "react";
 import CameraModule from "./CameraModule";
 import LinearLoaderAuto from "@/app/components/LinearLoaderAuto";
-import Webcam from "react-webcam";
 
 interface WebCamProps {
   image: string | null;
