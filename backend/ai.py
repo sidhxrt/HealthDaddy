@@ -56,6 +56,7 @@ def productInfo(personInfo, ingredients):
             "short_term_effects=['effect1', 'effect2', 'effect3'],"
             "long_term_effects=['effect1', 'effect2', 'effect3'],"
             "environmental_score=[one percentage value in array]"
+            "in the output, dont leave space. i.e the output should be safety_score=[value and not safety_score = [value nor safety_score= [value"
             "If any of the information is not available, please return 'N/A' or 'None'"
             r"i dont want any \n or ` or json or other words or alphabets in the output, i only want the output in the format mentioned"
         )
